@@ -6,7 +6,7 @@ static_data: ''
 polling_verb: get
 framework_version: 3.1.1
 serverless_language: python
-polling_url: https://trmnl.com/custom_plugin_example_data.json
+polling_url: https://cycling-tours-data-production.slowtech.workers.dev/v1/current
 polling_headers: ''
 polling_body: ''
 id: 358042
@@ -35,10 +35,10 @@ custom_fields:
   name: About This Plugin
   category: entertainment,sports
   field_type: author_bio
-  description: Displays jersey holders, ranking of best riders in general classification and next stage information and profile for the 2026 Tour de France.
+  description: Displays jersey holders, ranking of best riders in general classification and next stage information and profile for the supported races over the year - Tour de France, Vuelta a España, Giro d'Italia and more.
   github_url: https://github.com/martin2097
   learn_more_url: https://www.rapavy.cz/
   email_address: rapavy.mato@gmail.com
-name: Tour de France - Rankings & Jersey holders
-description:
+name: Cycling Race Tracker - Rankings & Jersey holders
+description: 'Coming Next: Vuelta a España'
 refresh_interval: 60
