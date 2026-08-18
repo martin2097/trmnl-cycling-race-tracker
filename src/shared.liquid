@@ -1,0 +1,253 @@
+{%- comment -%} Stage-race tracker — shared partials, jersey icons, glyphs, profile.
+  ALL race data is produced dynamically by transform.py (Wikipedia + Tissot). The
+  sample block below is only a preview fallback: set force_sample = true and pick
+  sample_mode ('race' | 'pre' | 'over') to freeze a frame without the transform. {%- endcomment -%}
+
+{%- assign JPATH = 'M4 5 L9 3 L10 7 L14 7 L15 3 L20 5 L19 11 L16 10 L16 21 L8 21 L8 10 L5 11 Z' -%}
+{%- capture jersey_gc -%}<svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="{{ JPATH }}" fill="#F5D200" stroke="#000" stroke-width="0.8"/></svg>{%- endcapture -%}
+{%- capture jersey_pts -%}<svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="{{ JPATH }}" fill="#16A34A" stroke="#000" stroke-width="0.8"/></svg>{%- endcapture -%}
+{%- capture jersey_kom -%}<svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="{{ JPATH }}" fill="#fff" stroke="#000" stroke-width="0.8"/><g fill="#C0223B"><circle cx="10" cy="11" r="1.1"/><circle cx="14" cy="11" r="1.1"/><circle cx="12" cy="14" r="1.1"/><circle cx="10" cy="17" r="1.1"/><circle cx="14" cy="17" r="1.1"/></g></svg>{%- endcapture -%}
+{%- capture jersey_yth -%}<svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="{{ JPATH }}" fill="#fff" stroke="#000" stroke-width="1"/></svg>{%- endcapture -%}
+
+{%- capture person_glyph -%}<svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="18" r="9" fill="#000"/><path d="M6 46 C6 33 16 28 24 28 C32 28 42 33 42 46 Z" fill="#000"/></svg>{%- endcapture -%}
+{%- capture peak_glyph -%}<svg width="13" height="11" viewBox="0 0 13 11" xmlns="http://www.w3.org/2000/svg"><path d="M0.5 10 L4 3 L6 6 L8 2 L12.5 10 Z" fill="#000"/></svg>{%- endcapture -%}
+{%- capture trophy_glyph -%}<svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"><path d="M11 5 h18 v6 a9 9 0 0 1 -18 0 Z" fill="#000"/><path d="M11 6 H6 a4 4 0 0 0 4 5 M29 6 h5 a4 4 0 0 1 -4 5" fill="none" stroke="#000" stroke-width="1.6"/><rect x="18" y="19" width="4" height="6" fill="#000"/><rect x="12" y="25" width="16" height="4" rx="1" fill="#000"/><rect x="10" y="29" width="20" height="4" rx="1" fill="#000"/></svg>{%- endcapture -%}
+{%- capture svg_logo -%}<svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><circle cx="6" cy="18" r="3.2" fill="none" stroke="#000" stroke-width="1.6"/><circle cx="18" cy="18" r="3.2" fill="none" stroke="#000" stroke-width="1.6"/><path d="M6 18 L11 9 L16 9 L18 18" fill="none" stroke="#000" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 6 L13 6 L11 9" fill="none" stroke="#000" stroke-width="1.6"/></svg>{%- endcapture -%}
+
+{%- comment -%} overview pictograms: calendar (dates), checkered flag (stages), distance arrows (km) {%- endcomment -%}
+{%- capture cal_glyph -%}<svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="5" width="18" height="16" rx="2" fill="none" stroke="#000" stroke-width="2"/><line x1="3" y1="9.5" x2="21" y2="9.5" stroke="#000" stroke-width="2"/><line x1="8" y1="3" x2="8" y2="7" stroke="#000" stroke-width="2" stroke-linecap="round"/><line x1="16" y1="3" x2="16" y2="7" stroke="#000" stroke-width="2" stroke-linecap="round"/></svg>{%- endcapture -%}
+{%- capture flag_glyph -%}<svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><line x1="5" y1="2" x2="5" y2="22" stroke="#000" stroke-width="2"/><rect x="5" y="3" width="14" height="9" fill="none" stroke="#000" stroke-width="1.4"/><rect x="5" y="3" width="4.7" height="3" fill="#000"/><rect x="14.3" y="3" width="4.7" height="3" fill="#000"/><rect x="9.7" y="6" width="4.6" height="3" fill="#000"/><rect x="5" y="9" width="4.7" height="3" fill="#000"/><rect x="14.3" y="9" width="4.7" height="3" fill="#000"/></svg>{%- endcapture -%}
+{%- capture road_glyph -%}<svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><line x1="3" y1="12" x2="21" y2="12" stroke="#000" stroke-width="2"/><polyline points="8,7 3,12 8,17" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><polyline points="16,7 21,12 16,17" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>{%- endcapture -%}
+
+{%- comment -%} ===== PREVIEW FALLBACK. sample_mode: 'race' | 'pre' | 'over' | 'rest'. ===== {%- endcomment -%}
+{%- assign force_sample = false -%}
+{%- assign sample_mode = 'pre' -%}
+{%- assign P = 'https://tissottiming.z6.web.core.windows.net/riders/team/2025/' -%}
+{%- if force_sample or race_title == nil and winner_name == nil and pre_race == nil -%}
+  {%- assign race_title = '2025 Tour de France' -%}
+  {%- assign stage_total = 21 -%}
+  {%- assign yellow_name = 'Tadej Pogačar' -%}{%- assign yellow_team_code = 'UAD' -%}{%- assign yellow_photo = P | append: '10014972740.png' -%}
+  {%- assign green_name = 'Jonathan Milan' -%}{%- assign green_team_code = 'LTK' -%}{%- assign green_photo = P | append: '10030115147.png' -%}
+  {%- assign kom_name = 'Lenny Martinez' -%}{%- assign kom_team_code = 'TBV' -%}{%- assign kom_photo = P | append: '10073681180.png' -%}
+  {%- assign white_name = 'Florian Lipowitz' -%}{%- assign white_team_code = 'RBH' -%}{%- assign white_photo = P | append: '10098806507.png' -%}
+  {%- assign profile_path = '0.0,37.4 4.8,37.7 9.9,37.7 14.6,37.6 20.1,37.1 22.3,35.8 24.9,36.8 27.1,36.5 30.7,37.2 35.4,37.6 40.1,37.8 46.3,37.7 51.5,37.5 56.3,37.0 57.4,36.0 61.1,37.1 65.0,37.7 69.9,37.2 74.9,37.1 76.2,36.7 79.9,37.8 85.2,37.8 90.4,37.8 95.2,37.6 100.0,37.7' -%}
+  {%- assign profile_climbs = '4|||22.3|||35.8|||Côte de Notre-Dame-de-Lorette|||173|||41.1^^^4|||57.3|||36.1|||Côte de Cassel|||151|||105.9^^^4|||75.6|||36.2|||Mont Noir|||146|||139.6' | split: '^^^' -%}
+  {%- if sample_mode == 'pre' -%}
+    {%- assign pre_race = true -%}{%- assign race_over = false -%}
+    {%- assign days_to_start = 4 -%}
+    {%- assign ov_date = '5–27 Jul' -%}{%- assign ov_stages = 21 -%}{%- assign ov_distance = '3,302' -%}
+    {%- assign py_year = '2024' -%}
+    {%- assign yellow_name = 'Tadej Pogačar' -%}{%- assign yellow_team_code = 'UAD' -%}
+    {%- assign green_name = 'Biniam Girmay' -%}{%- assign green_team_code = 'IWA' -%}{%- assign green_photo = P | append: '10063820223.png' -%}
+    {%- assign kom_name = 'Richard Carapaz' -%}{%- assign kom_team_code = 'EFE' -%}{%- assign kom_photo = '' -%}
+    {%- assign white_name = 'Remco Evenepoel' -%}{%- assign white_team_code = 'SOQ' -%}{%- assign white_photo = '' -%}
+    {%- assign next_stage_no = 1 -%}{%- assign next_start = 'Lille' -%}{%- assign next_finish = 'Lille' -%}{%- assign next_date = '5 July' -%}{%- assign next_type = 'Flat' -%}{%- assign next_km = '184.9 km' -%}{%- assign next_gain = 1984 -%}
+  {%- elsif sample_mode == 'over' -%}
+    {%- assign pre_race = false -%}{%- assign race_over = true -%}
+    {%- assign stage_tag = 'FINAL CLASSIFICATION' -%}
+    {%- assign next_stage_no = 21 -%}{%- assign next_start = 'Mantes-la-Ville' -%}{%- assign next_finish = 'Paris' -%}{%- assign next_date = '27 July' -%}
+    {%- assign winner_stage_no = 21 -%}{%- assign winner_name = 'Wout van Aert' -%}{%- assign winner_team_code = 'TVL' -%}{%- assign winner_time = "3h 22' 10&quot;" -%}{%- assign winner_photo = P | append: '10006636176.png' -%}
+    {%- capture gc_sample -%}1|||Tadej Pogačar|||UAD|||76h 00' 32&quot;|||{{ P }}10014972740.png^^^2|||Jonas Vingegaard|||TVL|||+ 4' 24&quot;|||{{ P }}10011208231.png^^^3|||Florian Lipowitz|||RBH|||+ 11' 09&quot;|||{{ P }}10098806507.png^^^4|||Oscar Onley|||TPP|||+ 12' 12&quot;|||{{ P }}10064124155.png^^^5|||Kévin Vauquelin|||ARK|||+ 17' 07&quot;|||{{ P }}10067207644.png^^^6|||Felix Gall|||DAT|||+ 19' 48&quot;|||^^^7|||Tobias Johannessen|||UXM|||+ 22' 30&quot;|||^^^8|||Primož Roglič|||RBH|||+ 24' 11&quot;|||^^^9|||Carlos Rodríguez|||IGD|||+ 26' 55&quot;|||^^^10|||Ben Healy|||EFE|||+ 29' 02&quot;|||{%- endcapture -%}
+    {%- assign gc = gc_sample | split: '^^^' -%}
+  {%- elsif sample_mode == 'rest' -%}
+    {%- assign pre_race = false -%}{%- assign race_over = false -%}{%- assign rest_day = true -%}
+    {%- assign rest_when = 'TODAY' -%}{%- assign winner_tag = "YESTERDAY'S STAGE WINNER" -%}
+    {%- assign next_stage_no = 16 -%}{%- assign next_start = 'Montpellier' -%}{%- assign next_finish = 'Mont Ventoux' -%}{%- assign next_date = '22 July' -%}
+    {%- assign winner_stage_no = 15 -%}{%- assign winner_name = 'Thymen Arensman' -%}{%- assign winner_team_code = 'IGD' -%}{%- assign winner_time = "4h 53' 35&quot;" -%}{%- assign winner_photo = P | append: '10010948149.png' -%}
+    {%- capture gc_sample -%}1|||Tadej Pogačar|||UAD|||50h 40' 28&quot;|||{{ P }}10014972740.png^^^2|||Jonas Vingegaard|||TVL|||+ 4' 13&quot;|||{{ P }}10011208231.png^^^3|||Florian Lipowitz|||RBH|||+ 7' 53&quot;|||{{ P }}10098806507.png^^^4|||Oscar Onley|||TPP|||+ 9' 18&quot;|||{{ P }}10064124155.png^^^5|||Kévin Vauquelin|||ARK|||+ 10' 21&quot;|||{{ P }}10067207644.png^^^6|||Felix Gall|||DAT|||+ 12' 18&quot;|||^^^7|||Tobias Johannessen|||UXM|||+ 14' 03&quot;|||^^^8|||Primož Roglič|||RBH|||+ 15' 47&quot;|||^^^9|||Carlos Rodríguez|||IGD|||+ 17' 22&quot;|||^^^10|||Ben Healy|||EFE|||+ 19' 09&quot;|||{%- endcapture -%}
+    {%- assign gc = gc_sample | split: '^^^' -%}
+  {%- else -%}
+    {%- assign pre_race = false -%}{%- assign race_over = false -%}
+    {%- assign stage_tag = "TODAY'S STAGE" -%}{%- assign winner_tag = "YESTERDAY'S STAGE WINNER" -%}
+    {%- assign next_stage_no = 15 -%}{%- assign next_start = 'Muret' -%}{%- assign next_finish = 'Carcassonne' -%}{%- assign next_date = '20 July' -%}{%- assign next_type = 'Hilly' -%}{%- assign next_km = '169.3 km' -%}{%- assign next_gain = 2644 -%}
+    {%- assign winner_stage_no = 14 -%}{%- assign winner_name = 'Thymen Arensman' -%}{%- assign winner_team_code = 'IGD' -%}{%- assign winner_time = "4h 53' 35&quot;" -%}{%- assign winner_photo = P | append: '10010948149.png' -%}
+    {%- capture gc_sample -%}1|||Tadej Pogačar|||UAD|||50h 40' 28&quot;|||{{ P }}10014972740.png^^^2|||Jonas Vingegaard|||TVL|||+ 4' 13&quot;|||{{ P }}10011208231.png^^^3|||Florian Lipowitz|||RBH|||+ 7' 53&quot;|||{{ P }}10098806507.png^^^4|||Oscar Onley|||TPP|||+ 9' 18&quot;|||{{ P }}10064124155.png^^^5|||Kévin Vauquelin|||ARK|||+ 10' 21&quot;|||{{ P }}10067207644.png^^^6|||Felix Gall|||DAT|||+ 12' 18&quot;|||^^^7|||Tobias Johannessen|||UXM|||+ 14' 03&quot;|||^^^8|||Primož Roglič|||RBH|||+ 15' 47&quot;|||^^^9|||Carlos Rodríguez|||IGD|||+ 17' 22&quot;|||^^^10|||Ben Healy|||EFE|||+ 19' 09&quot;|||{%- endcapture -%}
+    {%- assign gc = gc_sample | split: '^^^' -%}
+  {%- endif -%}
+{%- endif -%}
+
+{%- comment -%} no form fields — title comes from the race name produced by transform.py {%- endcomment -%}
+{%- assign feed_title = race_title | default: trmnl.plugin_settings.instance_name | default: 'Tour de France' -%}
+{%- assign race_year = race_title | split: ' ' | first -%}
+
+{%- comment -%} title_bar — shared across all sizes; sibling of layout. params: title {%- endcomment -%}
+{% template title_bar %}<div class="title_bar">
+  <img class="image image-stroke" src="https://upload.wikimedia.org/wikipedia/commons/5/50/Tour_de_France_logo_%28black_background%29.svg">
+  <span class="title">{{ title }}</span>
+</div>{% endtemplate %}
+
+{%- comment -%} badge — small black pill. params: text {%- endcomment -%}
+{% template badge %}<span class="bg--black text--white rounded--small px--2 label label--xsmall lg:label--large no-shrink">{{ text }}</span>{% endtemplate %}
+
+{%- comment -%} avatar — circular dithered photo, Tissot primary -> alt (Wikipedia) -> glyph via onerror.
+  params: url, size, fallback (svg glyph), alt (optional 2nd-choice photo URL) {%- endcomment -%}
+{% template avatar %}
+  {% assign fb_src = alt %}
+  {% if fb_src == nil or fb_src == '' %}{% capture fb_src %}data:image/svg+xml;base64,{{ fallback | base64_encode }}{% endcapture %}{% endif %}
+  <div class="bg--white rounded--full no-shrink overflow--hidden flex flex--center w--[{{ size }}px] h--[{{ size }}px]">
+    {% if url and url != '' %}<img class="image image-dither image--cover rounded--full w--full h--full" src="{{ url }}" onerror="this.onerror=null;this.src='{{ fb_src }}'">
+    {% else %}<img class="image rounded--full w--[55%] h--[55%]" src="data:image/svg+xml;base64,{{ fallback | base64_encode }}">{% endif %}
+  </div>
+{% endtemplate %}
+
+
+{%- comment -%} stat_cell — overview stat: pictogram + number + unit label (pre-race). params: icon, value, unit {%- endcomment -%}
+{% template stat_cell %}
+  <div class="flex flex--col flex--center-x flex--center-y gap--none h--full w--full overflow--hidden">
+    <img class="lg:hidden image w--[22px] h--[22px] no-shrink mb--1" src="data:image/svg+xml;base64,{{ icon | base64_encode }}">
+    <img class="hidden lg:visible image w--[30px] h--[30px] no-shrink mb--1" src="data:image/svg+xml;base64,{{ icon | base64_encode }}">
+    <span class="value value--small lg:value--base lg:portrait:value--small value--tnums text--center">{{ value }}</span>
+    <span class="label">{{ unit }}</span>
+  </div>
+{% endtemplate %}
+
+{%- comment -%} jersey_card — vertical jersey holder (pre-race). Surname only on ONE
+  line so long names (Evenepoel, Carapaz) can't wrap and collide. params: jersey, label, name, team, photo, alt, fallback {%- endcomment -%}
+{% template jersey_card %}
+  <div class="flex flex--col flex--center-x flex--center-y gap--xsmall h--full w--full overflow--hidden">
+    <div class="flex flex--row flex--center-y gap--xsmall no-shrink">
+      <img class="hidden lg:visible image w--[25px] h--[25px] no-shrink" src="data:image/svg+xml;base64,{{ jersey | base64_encode }}">
+      <img class="lg:hidden image w--[15px] h--[15px] no-shrink" src="data:image/svg+xml;base64,{{ jersey | base64_encode }}">
+      <span class="label lg:label--large label--gray 1bit:text--black">{{ label }}</span>
+    </div>
+    <div class="lg:hidden">
+    {% render 'avatar' with url: photo, size: 40, fallback: fallback, alt: alt %}
+    </div>
+    <div class="hidden lg:visible">
+    {% render 'avatar' with url: photo, size: 70, fallback: fallback, alt: alt %}
+    </div>
+    <div class="flex flex--col flex--center-x gap--none w--full no-shrink">
+      <span class="title title--xsmall lg:title--large text--center">{{ name | default: '—' | split: ' ' | last }}</span>
+      <span class="label label--xsmall lg:title--base label--gray 1bit:text--black">{{ team }}</span>
+    </div>
+  </div>
+{% endtemplate %}
+
+{%- comment -%} jersey_panel — horizontal jersey-holder card for the FULL bottom-left 2x2
+  grid (TRMNL X only). Top: jersey icon + role label. Bottom: rider avatar + full name +
+  team. params: jersey, label, name, team, photo, alt, fallback {%- endcomment -%}
+{% template jersey_panel %}
+  <div class="flex flex--col gap--large w--full h--full overflow--hidden">
+    <div class="flex flex--row flex--center-y gap--xsmall no-shrink">
+      <img class="image w--[35px] h--[35px] no-shrink" src="data:image/svg+xml;base64,{{ jersey | base64_encode }}">
+      <span class="label label--xlarge label--gray">{{ label }}</span>
+    </div>
+    <div class="flex flex--row flex--left flex--center-y gap--small overflow--hidden">
+      <div class="flex flex--center w--[70px] no-shrink">
+        {% render 'avatar' with url: photo, size: 60, fallback: fallback, alt: alt %}
+      </div>
+      <div class="flex flex--col flex--left gap--none overflow--hidden">
+        <span class="title title--large" data-clamp="2">{{ name | default: '—' }}</span>
+        <span class="label label--large label--gray">{{ team }}</span>
+      </div>
+    </div>
+  </div>
+{% endtemplate %}
+{% template jersey_panel_portrait %}
+  {% assign awrap = av_wrap | default: 'w--[90px] mx--3' %}
+  <div class="flex flex--col flex--center-y gap--large lg:portrait:gap w--full h--full overflow--hidden">
+    
+    <div class="flex flex--row flex--left flex--center-y gap--small w--full overflow--hidden">
+      <div class="flex flex--center no-shrink {{ awrap }}">
+        {% render 'avatar' with url: photo, size: 80, fallback: fallback, alt: alt %}
+      </div>
+      <div class="flex flex--col flex--left gap--none overflow--hidden">
+        <div class="flex flex--row flex--center-y gap--xsmall no-shrink">
+      <img class="image w--[25px] h--[25px] no-shrink" src="data:image/svg+xml;base64,{{ jersey | base64_encode }}">
+      <span class="label label--xlarge lg:portrait:label--large label--gray">{{ label }}</span>
+    </div>
+        <span class="title title--large" data-clamp="2">{{ name | default: '—' }}</span>
+        <span class="label label--large label--gray">{{ team }}</span>
+      </div>
+    </div>
+  </div>
+{% endtemplate %}
+
+
+{%- comment -%} stage_profile — FIXED-metre silhouette + category climbs. The viewBox is
+  split: the TOP third is reserved for the climb-category circles (so their numbers stay
+  big + legible) and the BOTTOM two-thirds holds the elevation silhouette. Marker size
+  scales with circ (circle radius) + cfont (number font), in viewBox units. fixedw renders
+  an exact pixel width (h ≈ fixedw/2.63 keeps circles round); else fills container width.
+  params: path, climbs, h, fixedw, circ, cfont {%- endcomment -%}
+{% template stage_profile %}
+  {% assign sw = fixedw | default: 0 %}
+  {% assign cr = circ | default: 3.9 %}
+  {% assign cf = cfont | default: 4.4 %}
+  {% assign cy = 4.4 %}
+  {% assign ly = cy | plus: cr | plus: 0.4 %}
+  {% assign dyv = cf | times: 0.35 %}
+  {%- comment -%} ink = silhouette + connector colour (#000 default). card = dithered rounded
+    background, light gray everywhere by default. A solid ink strip runs along the bottom so flat
+    stages read as a clean line; it carries the 0 km / total km markers in white. Climb + sprint
+    circles stay white-fill / black-text so they read on the card. km = total stage distance. {%- endcomment -%}
+  {% assign ink = ink | default: '#000' %}
+  {% assign card = card | default: 'bg--gray-75' %}
+  {% if card and card != '' %}<div class="{{ card }} rounded--large overflow--hidden pt--1{% if sw and sw != 0 %} flex flex--col flex--center-x{% else %} text--center{% endif %}">{% endif %}
+  <svg viewBox="0 0 100 38" preserveAspectRatio="none" font-size="1"{% if sw and sw != 0 %} height="{{ h | default: 152 }}" width="{{ sw }}"{% else %} class="w--full"{% endif %}>
+    {%- comment -%} silhouette baseline sits on the strip top (y=33) so the ink strip is fully UNDER
+      the route, never overlapping its low parts; strip then runs edge-to-edge to the bottom. {%- endcomment -%}
+    <g transform="translate(0,12.67) scale(1,0.535)">
+      <polygon points="0,38 {{ path }} 100,38" fill="{{ ink }}"></polygon>
+    </g>
+    {%- comment -%} bottom ink strip + distance markers (0 km left, total km right, in white) {%- endcomment -%}
+    <rect x="0" y="33" width="100" height="5" fill="{{ ink }}"></rect>
+    <text transform="translate(3,36.7) scale(3)" fill="#fff" style="font-family:'NicoClean','Inter',system-ui,sans-serif">0 km</text>
+    {% if km and km != '' %}<text transform="translate(97,36.7) scale(3)" fill="#fff" text-anchor="end" style="font-family:'NicoClean','Inter',system-ui,sans-serif">{{ km }}</text>{% endif %}
+    {% for c in climbs %}
+      {% assign cp = c | split: '|||' %}
+      {%- comment -%} cdx = spread-out circle x (field 6); the elbow connector still points to the TRUE x (field 1).
+        jy steps up per climb so neighbouring corners don't merge into one horizontal line {%- endcomment -%}
+      {% assign cdx = cp[6] | default: cp[1] %}
+      {% assign jstep = forloop.index0 | times: 1.0 %}
+      {% assign jy = 12.6 | minus: jstep %}
+      {% if jy < 9.0 %}{% assign jy = 9.0 %}{% endif %}
+      <polyline points="{{ cdx }},{{ ly }} {{ cdx }},{{ jy }} {{ cp[1] }},{{ jy }} {{ cp[1] }},33" fill="none" stroke="{{ ink }}" stroke-width="0.3" stroke-dasharray="1,1"></polyline>
+      <circle cx="{{ cdx }}" cy="{{ cy }}" r="{{ cr }}" fill="#fff" stroke="#000" stroke-width="0.5"></circle>
+      <text transform="translate({{ cdx }},{{ cy }}) scale({{ cf }})" dy="0.35" font-weight="bold" text-anchor="middle" fill="#000" style="font-family:'NicoClean','Inter',system-ui,sans-serif">{{ cp[0] }}</text>
+    {% endfor %}
+  </svg>
+  {% if card and card != '' %}</div>{% endif %}
+{% endtemplate %}
+
+{%- comment -%} rest_graphic — REST DAY stand-in for the stage profile, drawn in the SAME card style
+  (light gray dithered card, edge-to-edge, black baseline strip). Crescent moon + Zzz on the gray,
+  grounded on the strip. Same 100x38 viewBox / fixedw+h as stage_profile so it slots in identically. {%- endcomment -%}
+{% template rest_graphic %}
+  {% assign sw = fixedw | default: 0 %}
+  <div class="bg--gray-75 rounded--large overflow--hidden pt--1{% if sw and sw != 0 %} flex flex--col flex--center-x{% else %} text--center{% endif %}">
+    <svg viewBox="0 0 100 38" preserveAspectRatio="none" font-size="1"{% if sw and sw != 0 %} height="{{ h | default: 152 }}" width="{{ sw }}"{% else %} class="w--full"{% endif %}>
+      <circle cx="9" cy="8" r="0.5" fill="#000"></circle>
+      <circle cx="36" cy="6" r="0.5" fill="#000"></circle>
+      <circle cx="15" cy="18" r="0.4" fill="#000"></circle>
+      {%- comment -%} crescent via mask (the bite shows the card through — no white-disc artifact).
+        id MUST be unique per render: rest_graphic appears twice in full (OG + X-landscape) and a
+        shared id resolves to the hidden instance's mask, breaking the visible moon. {%- endcomment -%}
+      <mask id="moon_g{{ sw }}"><circle cx="22" cy="13" r="6.5" fill="#fff"></circle><circle cx="25" cy="10.5" r="5.7" fill="#000"></circle></mask>
+      <circle cx="22" cy="13" r="6.5" fill="#000" mask="url(#moon_g{{ sw }})"></circle>
+      <text transform="translate(62,29) scale(8)" font-weight="bold" fill="#000" style="font-family:'NicoClean','Inter',system-ui,sans-serif">z</text>
+      <text transform="translate(71,22) scale(11)" font-weight="bold" fill="#000" style="font-family:'NicoClean','Inter',system-ui,sans-serif">z</text>
+      <text transform="translate(81,14) scale(15)" font-weight="bold" fill="#000" style="font-family:'NicoClean','Inter',system-ui,sans-serif">Z</text>
+      <rect x="0" y="33" width="100" height="5" fill="#000"></rect>
+    </svg>
+  </div>
+{% endtemplate %}
+
+{%- comment -%} rest_banner — wide-flat REST DAY variant (X portrait), same card style, 280x27 viewBox. {%- endcomment -%}
+{% template rest_banner %}
+  <div class="bg--gray-75 rounded--large overflow--hidden text--center pt--1">
+    <svg class="w--full" viewBox="0 0 280 27" font-size="1" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="10" cy="7" r="0.6" fill="#000"></circle>
+      <circle cx="55" cy="5" r="0.5" fill="#000"></circle>
+      <circle cx="38" cy="15" r="0.4" fill="#000"></circle>
+      <circle cx="70" cy="9" r="0.5" fill="#000"></circle>
+      {%- comment -%} crescent via mask (the bite shows the card through — no white-disc artifact) {%- endcomment -%}
+      <mask id="moon_b"><circle cx="20" cy="12" r="8" fill="#fff"></circle><circle cx="23.5" cy="9" r="7" fill="#000"></circle></mask>
+      <circle cx="20" cy="12" r="8" fill="#000" mask="url(#moon_b)"></circle>
+      <text transform="translate(155,20) scale(8)" font-weight="bold" fill="#000" style="font-family:'NicoClean','Inter',system-ui,sans-serif">z</text>
+      <text transform="translate(188,15) scale(11)" font-weight="bold" fill="#000" style="font-family:'NicoClean','Inter',system-ui,sans-serif">z</text>
+      <text transform="translate(225,10) scale(15)" font-weight="bold" fill="#000" style="font-family:'NicoClean','Inter',system-ui,sans-serif">Z</text>
+      <rect x="0" y="22" width="280" height="5" fill="#000"></rect>
+    </svg>
+  </div>
+{% endtemplate %}

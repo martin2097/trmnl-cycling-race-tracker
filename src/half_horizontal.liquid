@@ -1,0 +1,1297 @@
+{%- comment -%}
+   HALF HORIZONTAL (800x240). PRE-RACE: countdown panel + 3 stats on the LEFT,
+  last-year jersey winners on the RIGHT. RACING/REST/OVER: next-stage text + stage winner on
+  the LEFT, jersey holders on the RIGHT.
+{% endcomment %}
+{%- assign tag = stage_tag | default: 'NEXT STAGE' -%}
+{%- assign wtag = winner_tag | default: 'LAST STAGE WINNER' -%}
+{%- assign rank_when = wtag | remove: ' WINNER' -%}
+{%- if pre_race -%}
+  {%- assign dist_num = ov_distance | remove: ' km' -%}
+  <div class="layout layout--col gap--none h--full px--3 py--2 lg:portrait:hidden">
+    <div class="grid grid--cols-12 gap--large grow w--full overflow--hidden">
+      {%- comment -%}
+         LEFT: THE TOUR IS COMING countdown filling the quarter + 3 stats
+      {% endcomment %}
+      <div class="col--span-6 flex flex--col gap--small overflow--hidden h--full">
+        <div class="bg--gray-20 rounded--large grow w--full flex flex--col flex--center-x flex--center-y gap--xsmall p--2 overflow--hidden">
+          <span class="title title--small text--white text--center">THE TOUR IS COMING</span>
+          <span class="value value--tnums text--white">
+            {{ days_to_start }}
+          </span>
+          <span class="label label--xsmall text--white text--center">DAYS TO GO</span>
+        </div>
+        {%- comment -%}
+           X landscape: facts share the column with the countdown (lg:grow) so the countdown shrinks a bit 
+        {% endcomment %}
+        <div class="flex flex--row gap--medium w--full flex--center-y no-shrink lg:grow">
+          <div class="grow overflow--hidden">
+            {% render 'stat_cell' with icon: cal_glyph, value: ov_date, unit: '' %}
+          </div>
+          <div class="grow overflow--hidden">
+            {% render 'stat_cell' with icon: flag_glyph, value: ov_stages, unit: 'STAGES' %}
+          </div>
+          <div class="grow overflow--hidden">
+            {% render 'stat_cell' with icon: road_glyph, value: dist_num, unit: 'KM' %}
+          </div>
+        </div>
+      </div>
+      {%- comment -%}
+         RIGHT: LAST YEAR JERSEY WINNERS title + jersey table
+      {% endcomment %}
+      <div class="col--span-6 gap--medium overflow--hidden">
+        <div class="w--[1px] h--full bg--gray-50 no-shrink"></div>
+        <div class="grow flex flex--col gap--small overflow--hidden">
+          <span class="title title--small no-shrink">LAST YEAR JERSEY WINNERS</span>
+          <table class="table table--small grow w--full">
+            <colgroup>
+              <col class="w--[34px]">
+              <col class="w--[112px]">
+              <col>
+            </colgroup>
+            <tbody>
+              <tr>
+                <td>
+                  <img class="image w--[26px] h--[26px] no-shrink" src="data:image/svg+xml;base64,{{ jersey_gc | base64_encode }}">
+                </td>
+                <td>
+                  <span class="label label--base label--gray 1bit:text--black">INDIVIDUAL</span>
+                </td>
+                <td>
+                  <div class="flex flex--row flex--left flex--center-y gap--small overflow--hidden">
+                    <div class="flex flex--center w--[42px] no-shrink">
+                      {% render 'avatar' with url: yellow_photo, size: 32, fallback: person_glyph, alt: yellow_photo_alt %}
+                    </div>
+                    <div class="flex flex--col flex--left gap--none overflow--hidden">
+                      <span class="title title--small">
+                        {{ yellow_name | default: '—' }}
+                      </span>
+                      <span class="label label--xsmall label--gray 1bit:text--black">
+                        {{ yellow_team_code }}
+                      </span>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <img class="image w--[26px] h--[26px] no-shrink" src="data:image/svg+xml;base64,{{ jersey_pts | base64_encode }}">
+                </td>
+                <td>
+                  <span class="label label--base label--gray 1bit:text--black">POINTS</span>
+                </td>
+                <td>
+                  <div class="flex flex--row flex--left flex--center-y gap--small overflow--hidden">
+                    <div class="flex flex--center w--[42px] no-shrink">
+                      {% render 'avatar' with url: green_photo, size: 32, fallback: person_glyph, alt: green_photo_alt %}
+                    </div>
+                    <div class="flex flex--col flex--left gap--none overflow--hidden">
+                      <span class="title title--small">
+                        {{ green_name | default: '—' }}
+                      </span>
+                      <span class="label label--xsmall label--gray 1bit:text--black">
+                        {{ green_team_code }}
+                      </span>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <img class="image w--[26px] h--[26px] no-shrink" src="data:image/svg+xml;base64,{{ jersey_kom | base64_encode }}">
+                </td>
+                <td>
+                  <span class="label label--base label--gray 1bit:text--black">CLIMBER</span>
+                </td>
+                <td>
+                  <div class="flex flex--row flex--left flex--center-y gap--small overflow--hidden">
+                    <div class="flex flex--center w--[42px] no-shrink">
+                      {% render 'avatar' with url: kom_photo, size: 32, fallback: person_glyph, alt: kom_photo_alt %}
+                    </div>
+                    <div class="flex flex--col flex--left gap--none overflow--hidden">
+                      <span class="title title--small">
+                        {{ kom_name | default: '—' }}
+                      </span>
+                      <span class="label label--xsmall label--gray 1bit:text--black">
+                        {{ kom_team_code }}
+                      </span>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <img class="image w--[26px] h--[26px] no-shrink" src="data:image/svg+xml;base64,{{ jersey_yth | base64_encode }}">
+                </td>
+                <td>
+                  <span class="label label--base label--gray 1bit:text--black">YOUNG</span>
+                </td>
+                <td>
+                  <div class="flex flex--row flex--left flex--center-y gap--small overflow--hidden">
+                    <div class="flex flex--center w--[42px] no-shrink">
+                      {% render 'avatar' with url: white_photo, size: 32, fallback: person_glyph, alt: white_photo_alt %}
+                    </div>
+                    <div class="flex flex--col flex--left gap--none overflow--hidden">
+                      <span class="title title--small">
+                        {{ white_name | default: '—' }}
+                      </span>
+                      <span class="label label--xsmall label--gray 1bit:text--black">
+                        {{ white_team_code }}
+                      </span>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          {%- comment -%}
+             X LANDSCAPE: first-stage info under the jersey holders (hidden on OG + X portrait) 
+          {% endcomment %}
+          <div class="hidden lg:flex lg:portrait:hidden flex--col flex--left gap--xsmall w--full no-shrink">
+            <div class="divider mb--1 w--full"></div>
+            <div class="flex flex--col w--full no-shrink">
+              <span class="title title--small">STARTING OF WITH ...</span>
+              <div class="grid grid--cols-12 gap--medium w--full h--[88px]">
+                <div class="col--span-6 flex flex--col flex--left flex--center-y gap--xsmall overflow--hidden">
+                  <div class="flex flex--row flex--left flex--center-y gap--small no-shrink">
+                    {% render 'badge' with text: 'STAGE 1' %}
+                    <span class="label label--xsmall label--gray">
+                      {{ next_date | upcase }}
+                    </span>
+                  </div>
+                  <span class="title title--small" data-clamp="2">
+                    {{ next_start | upcase }}
+                 › 
+                    {{ next_finish | upcase }}
+                  </span>
+                  <div class="flex flex--row flex--left flex--center-y gap--xsmall flex--wrap">
+                    {%- if next_type and next_type != '' -%}
+                      <span class="label label--xsmall label--outline">
+                        {{ next_type | upcase }}
+                      </span>
+                    {% endif %}
+                    {%- if next_km and next_km != '' -%}
+                      <span class="label label--xsmall label--gray value--tnums">
+                        {{ next_km }}
+                      </span>
+                    {% endif %}
+                    {%- if next_gain and next_gain != 0 -%}
+                      <span class="flex flex--row flex--center-y gap--xsmall">
+                        <img class="image w--[12px] h--[10px] no-shrink" src="data:image/svg+xml;base64,{{ peak_glyph | base64_encode }}">
+                        <span class="label label--xsmall label--gray value--tnums">
+                          {{ next_gain }}
+                       m
+                        </span>
+                      </span>
+                    {% endif %}
+                  </div>
+                </div>
+                <div class="col--span-6 flex flex--center-y flex--center-x overflow--hidden">
+                  {% render 'stage_profile' with path: profile_path, climbs: profile_climbs, fixedw: 205, h: 78, circ: 4.5, cfont: 4.2, km: next_km %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {%- comment -%}
+     ===== X PORTRAIT: exact copy of full OG pre-race ===== 
+  {% endcomment %}
+  <div class="layout layout--col gap--none h--full px--3 py--2 hidden lg:portrait:visible">
+    <div class="hidden flex flex--col gap--none h--full w--full">
+      <div class="grid grid--cols-12 gap--large grow w--full">
+        <div class="col--span-4 h--full">
+          <div class="bg--gray-20 rounded--large h--full w--full flex flex--col flex--center-x flex--center-y gap--medium p--6 overflow--hidden">
+            <span class="title title--large text--white text--center">THE TOUR IS COMING</span>
+            <span class="value value--mega value--tnums text--white">
+              {{ days_to_start }}
+            </span>
+            <span class="title text--white text--center">DAYS TO GO</span>
+          </div>
+        </div>
+        <div class="col--span-8 flex flex--col h--full overflow--hidden">
+          <div class="flex flex--col w--full no-shrink">
+            <div class="flex flex--row gap--medium w--full flex--center-y">
+              <div class="grow overflow--hidden">
+                {% render 'stat_cell' with icon: cal_glyph, value: ov_date, unit: '' %}
+              </div>
+              <div class="grow overflow--hidden">
+                {% render 'stat_cell' with icon: flag_glyph, value: ov_stages, unit: 'STAGES' %}
+              </div>
+              <div class="grow overflow--hidden">
+                {% render 'stat_cell' with icon: road_glyph, value: dist_num, unit: 'KM' %}
+              </div>
+            </div>
+          </div>
+          <div class="divider"></div>
+          <span class="title title--small no-shrink">LAST YEAR JERSEY WINNERS</span>
+          <table class="table table--medium grow w--full">
+            <colgroup>
+              <col class="w--[34px]">
+              <col class="w--[112px]">
+              <col>
+            </colgroup>
+            <tbody>
+              <tr>
+                <td>
+                  <img class="image w--[26px] h--[26px] no-shrink" src="data:image/svg+xml;base64,{{ jersey_gc | base64_encode }}">
+                </td>
+                <td>
+                  <span class="label label--base label--gray">INDIVIDUAL</span>
+                </td>
+                <td>
+                  <div class="flex flex--row flex--left flex--center-y gap--small overflow--hidden">
+                    <div class="flex flex--center w--[42px] no-shrink">
+                      {% render 'avatar' with url: yellow_photo, size: 32, fallback: person_glyph, alt: yellow_photo_alt %}
+                    </div>
+                    <div class="flex flex--col flex--left gap--none overflow--hidden">
+                      <span class="title title--small">
+                        {{ yellow_name | default: '—' }}
+                      </span>
+                      <span class="label label--xsmall label--gray">
+                        {{ yellow_team_code }}
+                      </span>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <img class="image w--[26px] h--[26px] no-shrink" src="data:image/svg+xml;base64,{{ jersey_pts | base64_encode }}">
+                </td>
+                <td>
+                  <span class="label label--base label--gray">POINTS</span>
+                </td>
+                <td>
+                  <div class="flex flex--row flex--left flex--center-y gap--small overflow--hidden">
+                    <div class="flex flex--center w--[42px] no-shrink">
+                      {% render 'avatar' with url: green_photo, size: 32, fallback: person_glyph, alt: green_photo_alt %}
+                    </div>
+                    <div class="flex flex--col flex--left gap--none overflow--hidden">
+                      <span class="title title--small">
+                        {{ green_name | default: '—' }}
+                      </span>
+                      <span class="label label--xsmall label--gray">
+                        {{ green_team_code }}
+                      </span>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <img class="image w--[26px] h--[26px] no-shrink" src="data:image/svg+xml;base64,{{ jersey_kom | base64_encode }}">
+                </td>
+                <td>
+                  <span class="label label--base label--gray">CLIMBER</span>
+                </td>
+                <td>
+                  <div class="flex flex--row flex--left flex--center-y gap--small overflow--hidden">
+                    <div class="flex flex--center w--[42px] no-shrink">
+                      {% render 'avatar' with url: kom_photo, size: 32, fallback: person_glyph, alt: kom_photo_alt %}
+                    </div>
+                    <div class="flex flex--col flex--left gap--none overflow--hidden">
+                      <span class="title title--small">
+                        {{ kom_name | default: '—' }}
+                      </span>
+                      <span class="label label--xsmall label--gray">
+                        {{ kom_team_code }}
+                      </span>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <img class="image w--[26px] h--[26px] no-shrink" src="data:image/svg+xml;base64,{{ jersey_yth | base64_encode }}">
+                </td>
+                <td>
+                  <span class="label label--base label--gray">YOUNG</span>
+                </td>
+                <td>
+                  <div class="flex flex--row flex--left flex--center-y gap--small overflow--hidden">
+                    <div class="flex flex--center w--[42px] no-shrink">
+                      {% render 'avatar' with url: white_photo, size: 32, fallback: person_glyph, alt: white_photo_alt %}
+                    </div>
+                    <div class="flex flex--col flex--left gap--none overflow--hidden">
+                      <span class="title title--small">
+                        {{ white_name | default: '—' }}
+                      </span>
+                      <span class="label label--xsmall label--gray">
+                        {{ white_team_code }}
+                      </span>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="divider"></div>
+          <div class="flex flex--col w--full no-shrink">
+            <span class="title title--small">STARTING OF WITH ...</span>
+            <div class="grid grid--cols-12 gap--medium w--full h--[88px]">
+              <div class="col--span-6 flex flex--col flex--left flex--center-y gap--xsmall overflow--hidden">
+                <div class="flex flex--row flex--left flex--center-y gap--small no-shrink">
+                  {% render 'badge' with text: 'STAGE 1' %}
+                  <span class="label label--xsmall label--gray">
+                    {{ next_date | upcase }}
+                  </span>
+                </div>
+                <span class="title title--small" data-clamp="2">
+                  {{ next_start | upcase }}
+                 › 
+                  {{ next_finish | upcase }}
+                </span>
+                <div class="flex flex--row flex--left flex--center-y gap--xsmall flex--wrap">
+                  {%- if next_type and next_type != '' -%}
+                    <span class="label label--xsmall label--outline">
+                      {{ next_type | upcase }}
+                    </span>
+                  {% endif %}
+                  {%- if next_km and next_km != '' -%}
+                    <span class="label label--xsmall label--gray value--tnums">
+                      {{ next_km }}
+                    </span>
+                  {% endif %}
+                  {%- if next_gain and next_gain != 0 -%}
+                    <span class="flex flex--row flex--center-y gap--xsmall">
+                      <img class="image w--[12px] h--[10px] no-shrink" src="data:image/svg+xml;base64,{{ peak_glyph | base64_encode }}">
+                      <span class="label label--xsmall label--gray value--tnums">
+                        {{ next_gain }}
+                       m
+                      </span>
+                    </span>
+                  {% endif %}
+                </div>
+              </div>
+              <div class="col--span-6 flex flex--center-y flex--center-x overflow--hidden">
+                {% render 'stage_profile' with path: profile_path, climbs: profile_climbs, fixedw: 205, h: 78, circ: 4.5, cfont: 4.2, km: next_km %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {%- else -%}
+  <div class="layout layout--col gap--none h--full px--3 py--2 lg:portrait:hidden">
+    {%- comment -%}
+       OG grid: LEFT stage banner + winner, RIGHT jersey holders (hidden on X)
+    {% endcomment %}
+    <div class="grid grid--cols-12 gap--large grow w--full overflow--hidden lg:hidden">
+      {%- comment -%}
+         LEFT (6/12): next-stage text (no profile) + stage winner
+      {% endcomment %}
+      <div class="col--span-6 flex flex--col gap--small overflow--hidden h--full">
+        {%- if race_over -%}
+          {%- assign champ_tag = 'TOUR DE FRANCE WINNER' -%}
+          <div class="flex flex--row flex--left flex--center-y gap--medium w--full no-shrink overflow--hidden">
+            {% render 'avatar' with url: yellow_photo, size: 85, fallback: person_glyph, alt: yellow_photo_alt %}
+            <div class="flex flex--col flex--left gap--xsmall grow overflow--hidden">
+              <div class="flex flex--row flex--left no-shrink">
+                {% render 'badge' with text: champ_tag %}
+              </div>
+              <span class="title title--large">
+                {{ yellow_name }}
+              </span>
+              <span class="label label--gray 1bit:text--black">
+                {{ yellow_team_code }}
+              </span>
+            </div>
+          </div>
+          {%- elsif rest_day -%}
+          <div class="flex flex--col flex--left flex--between grow overflow--hidden w--full">
+            <div class="flex flex--row flex--left flex--center-y gap--medium no-shrink">
+              {% render 'badge' with text: 'REST DAY' %}
+              {%- if rest_when and rest_when != '' -%}
+                <span class="label label--xsmall">
+                  {{ rest_when }}
+                </span>
+              {% endif %}
+            </div>
+            <span class="title title--medium">LEGS UP, WHEELS DOWN</span>
+            <div class="flex flex--row flex--left flex--center-y gap--small flex--wrap">
+              <span class="label label--base">NEXT UP</span>
+              <span class="label label--base value--tnums">
+                STAGE
+                {{ next_stage_no }}
+              </span>
+              <span class="label label--base">
+                {{ next_start | upcase }}
+                 ›
+                {{ next_finish | upcase }}
+              </span>
+            </div>
+          </div>
+          {%- else -%}
+          <div class="flex flex--col flex--left flex--between gap--small grow overflow--hidden w--full">
+            <div class="flex flex--row flex--left flex--center-y gap--medium no-shrink">
+              {% render 'badge' with text: tag %}
+              <span class="label label--xsmall">
+                STAGE
+                {{ next_stage_no }}
+              ·
+                {{ next_date | upcase }}
+              </span>
+            </div>
+            <span class="title title--medium" data-clamp="2">
+              {{ next_start | upcase }}
+              <span class="px--2">›</span>
+              {{ next_finish | upcase }}
+            </span>
+            <div class="flex flex--row flex--left flex--center-y gap--medium flex--wrap">
+              {%- if next_type and next_type != '' -%}
+                <span class="label label--base label--outline">
+                  {{ next_type | upcase }}
+                </span>
+              {% endif %}
+              {%- if next_km and next_km != '' -%}
+                <span class="label label--base label--gray value--tnums 1bit:text--black">
+                  {{ next_km }}
+                </span>
+              {% endif %}
+              {%- if next_gain and next_gain != 0 -%}
+                <span class="flex flex--row flex--center-y gap--xsmall">
+                  <img class="image w--[18px] h--[15px] no-shrink" src="data:image/svg+xml;base64,{{ peak_glyph | base64_encode }}">
+                  <span class="label label--base label--gray value--tnums 1bit:text--black">
+                    {{ next_gain }}
+                     m
+                  </span>
+                </span>
+              {% endif %}
+            </div>
+          </div>
+        {% endif %}
+        <div class="divider py--1"></div>
+        <div class="flex flex--row flex--left flex--center-y gap--medium w--full no-shrink">
+          {% render 'avatar' with url: winner_photo, size: 65, fallback: person_glyph, alt: winner_photo_alt %}
+          <div class="flex flex--col flex--left gap--small overflow--hidden">
+            <div class="flex flex--row flex--left flex--center-y gap--small w--full no-shrink">
+              {% render 'badge' with text: wtag %}
+            </div>
+            <span class="title title--base">
+              {{ winner_name | default: '—' }}
+            </span>
+            <span class="label label--xsmall label--gray 1bit:text--black">
+              {{ winner_team_code }}
+            </span>
+          </div>
+        </div>
+      </div>
+      {%- comment -%}
+         RIGHT (6/12): jersey holders, rows fill the height
+      {% endcomment %}
+      <div class="col--span-6 flex flex--row gap--medium overflow--hidden">
+        <div class="w--[1px] h--full bg--gray-55 no-shrink"></div>
+        <div class="grow h--full overflow--hidden">
+          <table class="table table--base h--full w--full">
+            <colgroup>
+              <col class="w--[34px]">
+              <col class="w--[112px]">
+              <col>
+            </colgroup>
+            <tbody>
+              <tr>
+                <td>
+                  <img class="image w--[26px] h--[26px] no-shrink" src="data:image/svg+xml;base64,{{ jersey_gc | base64_encode }}">
+                </td>
+                <td>
+                  <span class="label label--base label--gray 1bit:text--black">INDIVIDUAL</span>
+                </td>
+                <td>
+                  <div class="flex flex--row flex--left flex--center-y gap--small overflow--hidden">
+                    <div class="flex flex--center w--[44px] no-shrink">
+                      {% render 'avatar' with url: yellow_photo, size: 38, fallback: person_glyph, alt: yellow_photo_alt %}
+                    </div>
+                    <div class="flex flex--col flex--left gap--none overflow--hidden">
+                      <span class="title title--small">
+                        {{ yellow_name | default: '—' }}
+                      </span>
+                      <span class="label label--xsmall label--gray 1bit:text--black">
+                        {{ yellow_team_code }}
+                      </span>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <img class="image w--[26px] h--[26px] no-shrink" src="data:image/svg+xml;base64,{{ jersey_pts | base64_encode }}">
+                </td>
+                <td>
+                  <span class="label label--base label--gray 1bit:text--black">POINTS</span>
+                </td>
+                <td>
+                  <div class="flex flex--row flex--left flex--center-y gap--small overflow--hidden">
+                    <div class="flex flex--center w--[44px] no-shrink">
+                      {% render 'avatar' with url: green_photo, size: 38, fallback: person_glyph, alt: green_photo_alt %}
+                    </div>
+                    <div class="flex flex--col flex--left gap--none overflow--hidden">
+                      <span class="title title--small">
+                        {{ green_name | default: '—' }}
+                      </span>
+                      <span class="label label--xsmall label--gray 1bit:text--black">
+                        {{ green_team_code }}
+                      </span>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <img class="image w--[26px] h--[26px] no-shrink" src="data:image/svg+xml;base64,{{ jersey_kom | base64_encode }}">
+                </td>
+                <td>
+                  <span class="label label--base label--gray 1bit:text--black">CLIMBER</span>
+                </td>
+                <td>
+                  <div class="flex flex--row flex--left flex--center-y gap--small overflow--hidden">
+                    <div class="flex flex--center w--[44px] no-shrink">
+                      {% render 'avatar' with url: kom_photo, size: 38, fallback: person_glyph, alt: kom_photo_alt %}
+                    </div>
+                    <div class="flex flex--col flex--left gap--none overflow--hidden">
+                      <span class="title title--small">
+                        {{ kom_name | default: '—' }}
+                      </span>
+                      <span class="label label--xsmall label--gray 1bit:text--black">
+                        {{ kom_team_code }}
+                      </span>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <img class="image w--[26px] h--[26px] no-shrink" src="data:image/svg+xml;base64,{{ jersey_yth | base64_encode }}">
+                </td>
+                <td>
+                  <span class="label label--base label--gray 1bit:text--black">YOUNG</span>
+                </td>
+                <td>
+                  <div class="flex flex--row flex--left flex--center-y gap--small overflow--hidden">
+                    <div class="flex flex--center w--[44px] no-shrink">
+                      {% render 'avatar' with url: white_photo, size: 38, fallback: person_glyph, alt: white_photo_alt %}
+                    </div>
+                    <div class="flex flex--col flex--left gap--none overflow--hidden">
+                      <span class="title title--small">
+                        {{ white_name | default: '—' }}
+                      </span>
+                      <span class="label label--xsmall label--gray 1bit:text--black">
+                        {{ white_team_code }}
+                      </span>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    {%- comment -%}
+       ---- X (lg) only: swapped — LEFT stage winner + jersey holders, RIGHT stage banner + TOP 3 ----
+    {% endcomment %}
+    <div class="hidden lg:grid grid--cols-12 gap--large grow w--full overflow--hidden">
+      <div class="col--span-6 flex flex--col gap--small overflow--hidden h--full">
+        {%- if race_over -%}
+          <div class="flex flex--row flex--left flex--center-y gap--medium w--full no-shrink overflow--hidden">
+            {% render 'avatar' with url: yellow_photo, size: 70, fallback: person_glyph, alt: yellow_photo_alt %}
+            <div class="flex flex--col flex--left gap--xsmall grow overflow--hidden">
+              <div class="flex flex--row flex--left no-shrink">
+                {% render 'badge' with text: 'TOUR DE FRANCE WINNER' %}
+              </div>
+              <span class="title title--medium">
+                {{ yellow_name }}
+              </span>
+              <span class="label label--gray">
+                {{ yellow_team_code }}
+              </span>
+            </div>
+          </div>
+          {%- elsif rest_day -%}
+          <div class="flex flex--col flex--left gap--small no-shrink overflow--hidden w--full">
+            <div class="flex flex--row flex--left flex--center-y gap--medium no-shrink">
+              {% render 'badge' with text: 'REST DAY' %}
+              {%- if rest_when and rest_when != '' -%}
+                <span class="label label--xsmall">
+                  {{ rest_when }}
+                </span>
+              {% endif %}
+            </div>
+            <span class="title title--medium">LEGS UP, WHEELS DOWN</span>
+            <div class="flex flex--row flex--left flex--center-y gap--small flex--wrap">
+              <span class="label label--base">NEXT UP</span>
+              <span class="label label--base value--tnums">
+                STAGE
+                {{ next_stage_no }}
+              </span>
+              <span class="label label--base">
+                {{ next_start | upcase }}
+                 ›
+                {{ next_finish | upcase }}
+              </span>
+            </div>
+          </div>
+          {%- else -%}
+          <div class="flex flex--col flex--left gap--small no-shrink overflow--hidden w--full">
+            <div class="flex flex--row flex--left flex--center-y gap--medium no-shrink">
+              {% render 'badge' with text: tag %}
+              <span class="label lg:label--large">
+                STAGE
+                {{ next_stage_no }}
+                 ·
+                {{ next_date | upcase }}
+              </span>
+            </div>
+            <span class="title title--medium" data-clamp="2">
+              {{ next_start | upcase }}
+              <span class="px--2">›</span>
+              {{ next_finish | upcase }}
+            </span>
+            <div class="flex flex--row flex--left flex--center-y gap--medium flex--wrap">
+              {%- if next_type and next_type != '' -%}
+                <span class="label label--base label--outline">
+                  {{ next_type | upcase }}
+                </span>
+              {% endif %}
+              {%- if next_km and next_km != '' -%}
+                <span class="label label--base label--gray value--tnums">
+                  {{ next_km }}
+                </span>
+              {% endif %}
+              {%- if next_gain and next_gain != 0 -%}
+                <span class="flex flex--row flex--center-y gap--xsmall">
+                  <img class="image w--[18px] h--[15px] no-shrink" src="data:image/svg+xml;base64,{{ peak_glyph | base64_encode }}">
+                  <span class="label label--base label--gray value--tnums">
+                    {{ next_gain }}
+                     m
+                  </span>
+                </span>
+              {% endif %}
+            </div>
+          </div>
+        {% endif %}
+        <div class="divider py--1"></div>
+        <div class="flex flex--row flex--left w--full no-shrink">
+          {% render 'badge' with text: 'TOP 3 RANKING' %}
+          <span class="label label--xsmall">
+            AFTER
+            {{ rank_when }}
+          </span>
+        </div>
+        {%- assign h0 = gc[0] | split: '|||' -%}
+        {%- assign h1 = gc[1] | split: '|||' -%}
+        {%- assign h2 = gc[2] | split: '|||' -%}
+        <table class="table table--small h--full w--full">
+          <tbody>
+            <tr>
+              <td class="w--[30px] py--1">
+                <span class="value value--small value--tnums">
+                  {{ h0[0] }}
+                </span>
+              </td>
+              <td class="w--[48px] py--1">
+                {% render 'avatar' with url: h0[4], size: 40, fallback: person_glyph, alt: h0[5] %}
+              </td>
+              <td class="text--left">
+                <div class="flex flex--col flex--left gap--none overflow--hidden">
+                  <span class="title title--base">
+                    {{ h0[1] }}
+                  </span>
+                  <span class="label label--xsmall label--gray">
+                    {{ h0[2] }}
+                  </span>
+                </div>
+              </td>
+              <td class="w--[100px] text--right">
+                <span class="value value--xxsmall value--tnums">
+                  {{ h0[3] }}
+                </span>
+              </td>
+            </tr>
+            <tr>
+              <td class="w--[30px]">
+                <span class="value value--small value--tnums">
+                  {{ h1[0] }}
+                </span>
+              </td>
+              <td class="w--[48px]">
+                {% render 'avatar' with url: h1[4], size: 34, fallback: person_glyph, alt: h1[5] %}
+              </td>
+              <td class="text--left">
+                <div class="flex flex--col flex--left gap--none overflow--hidden">
+                  <span class="title title--base">
+                    {{ h1[1] }}
+                  </span>
+                  <span class="label label--xsmall label--gray">
+                    {{ h1[2] }}
+                  </span>
+                </div>
+              </td>
+              <td class="w--[100px] text--right">
+                <span class="value value--xxsmall value--tnums">
+                  {{ h1[3] }}
+                </span>
+              </td>
+            </tr>
+            <tr>
+              <td class="w--[30px]">
+                <span class="value value--small value--tnums">
+                  {{ h2[0] }}
+                </span>
+              </td>
+              <td class="w--[48px]">
+                {% render 'avatar' with url: h2[4], size: 34, fallback: person_glyph, alt: h2[5] %}
+              </td>
+              <td class="text--left">
+                <div class="flex flex--col flex--left gap--none overflow--hidden">
+                  <span class="title title--base">
+                    {{ h2[1] }}
+                  </span>
+                  <span class="label label--xsmall label--gray">
+                    {{ h2[2] }}
+                  </span>
+                </div>
+              </td>
+              <td class="w--[100px] text--right">
+                <span class="value value--xxsmall value--tnums">
+                  {{ h2[3] }}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col--span-6 flex flex--row gap--medium overflow--hidden">
+        <div class="w--[1px] h--full bg--gray-55 no-shrink"></div>
+        <div class="grow flex flex--col gap--small overflow--hidden h--full">
+          <div class="flex flex--row flex--left flex--center-y gap--medium w--full no-shrink overflow--hidden">
+            {% render 'avatar' with url: winner_photo, size: 65, fallback: person_glyph, alt: winner_photo_alt %}
+            <div class="flex flex--col flex--left gap--small overflow--hidden">
+              <div class="flex flex--row flex--left flex--center-y gap--small w--full no-shrink">
+                {% render 'badge' with text: wtag %}
+              </div>
+              <span class="title title--base">
+                {{ winner_name | default: '—' }}
+              </span>
+              <span class="label label--xsmall label--gray">
+                {{ winner_team_code }}
+              </span>
+            </div>
+          </div>
+          <div class="divider py--1"></div>
+          <table class="table table--base h--full w--full">
+            <colgroup>
+              <col class="w--[34px]">
+              <col class="w--[112px]">
+              <col>
+            </colgroup>
+            <tbody>
+              <tr>
+                <td>
+                  <img class="image w--[26px] h--[26px] no-shrink" src="data:image/svg+xml;base64,{{ jersey_gc | base64_encode }}">
+                </td>
+                <td>
+                  <span class="label label--base label--gray">INDIVIDUAL</span>
+                </td>
+                <td>
+                  <div class="flex flex--row flex--left flex--center-y gap--small overflow--hidden">
+                    <div class="flex flex--center w--[44px] no-shrink">
+                      {% render 'avatar' with url: yellow_photo, size: 38, fallback: person_glyph, alt: yellow_photo_alt %}
+                    </div>
+                    <div class="flex flex--col flex--left gap--none overflow--hidden">
+                      <span class="title title--small">
+                        {{ yellow_name | default: '—' }}
+                      </span>
+                      <span class="label label--xsmall label--gray">
+                        {{ yellow_team_code }}
+                      </span>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <img class="image w--[26px] h--[26px] no-shrink" src="data:image/svg+xml;base64,{{ jersey_pts | base64_encode }}">
+                </td>
+                <td>
+                  <span class="label label--base label--gray">POINTS</span>
+                </td>
+                <td>
+                  <div class="flex flex--row flex--left flex--center-y gap--small overflow--hidden">
+                    <div class="flex flex--center w--[44px] no-shrink">
+                      {% render 'avatar' with url: green_photo, size: 38, fallback: person_glyph, alt: green_photo_alt %}
+                    </div>
+                    <div class="flex flex--col flex--left gap--none overflow--hidden">
+                      <span class="title title--small">
+                        {{ green_name | default: '—' }}
+                      </span>
+                      <span class="label label--xsmall label--gray">
+                        {{ green_team_code }}
+                      </span>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <img class="image w--[26px] h--[26px] no-shrink" src="data:image/svg+xml;base64,{{ jersey_kom | base64_encode }}">
+                </td>
+                <td>
+                  <span class="label label--base label--gray">CLIMBER</span>
+                </td>
+                <td>
+                  <div class="flex flex--row flex--left flex--center-y gap--small overflow--hidden">
+                    <div class="flex flex--center w--[44px] no-shrink">
+                      {% render 'avatar' with url: kom_photo, size: 38, fallback: person_glyph, alt: kom_photo_alt %}
+                    </div>
+                    <div class="flex flex--col flex--left gap--none overflow--hidden">
+                      <span class="title title--small">
+                        {{ kom_name | default: '—' }}
+                      </span>
+                      <span class="label label--xsmall label--gray">
+                        {{ kom_team_code }}
+                      </span>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <img class="image w--[26px] h--[26px] no-shrink" src="data:image/svg+xml;base64,{{ jersey_yth | base64_encode }}">
+                </td>
+                <td>
+                  <span class="label label--base label--gray">YOUNG</span>
+                </td>
+                <td>
+                  <div class="flex flex--row flex--left flex--center-y gap--small overflow--hidden">
+                    <div class="flex flex--center w--[44px] no-shrink">
+                      {% render 'avatar' with url: white_photo, size: 38, fallback: person_glyph, alt: white_photo_alt %}
+                    </div>
+                    <div class="flex flex--col flex--left gap--none overflow--hidden">
+                      <span class="title title--small">
+                        {{ white_name | default: '—' }}
+                      </span>
+                      <span class="label label--xsmall label--gray">
+                        {{ white_team_code }}
+                      </span>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  {%- comment -%}
+     ===== X PORTRAIT: exact copy of full OG racing / rest / over ===== 
+  {% endcomment %}
+  <div class="hidden lg:portrait:flex flex--col gap--none h--full px--3 py--2 w--full">
+    {%- if race_over -%}
+      {%- assign champ_tag = 'TOUR DE FRANCE WINNER' -%}
+      {%- assign pgc0 = gc[0] | split: '|||' -%}
+      <div class="flex flex--row flex--center-y gap--large w--full no-shrink overflow--hidden">
+        <div class="flex flex--row flex--left flex--center-y gap--medium grow overflow--hidden">
+          {% render 'avatar' with url: yellow_photo, size: 92, fallback: person_glyph, alt: yellow_photo_alt %}
+          <div class="flex flex--col flex--left gap--xsmall grow overflow--hidden">
+            <div class="flex flex--row flex--left no-shrink">
+              {% render 'badge' with text: champ_tag %}
+            </div>
+            <span class="title title--xlarge">
+              {{ yellow_name }}
+            </span>
+            <span class="label label--gray">
+              {{ yellow_team_code }}
+            </span>
+          </div>
+        </div>
+        <div class="flex flex--row flex--center-y gap--large no-shrink">
+          <div class="flex flex--col flex--center-x flex--center-y gap--xsmall overflow--hidden">
+            <img class="image w--[26px] h--[26px] no-shrink" src="data:image/svg+xml;base64,{{ flag_glyph | base64_encode }}">
+            <span class="label label--small label--gray text--center">TOTAL TIME</span>
+            <span class="value value--xsmall value--tnums text--center">
+              {{ pgc0[3] }}
+            </span>
+          </div>
+          <div class="w--[1px] h--[68px] bg--gray-55 no-shrink"></div>
+          <div class="flex flex--col flex--center-x flex--center-y gap--xsmall overflow--hidden">
+            <img class="image w--[26px] h--[26px] no-shrink" src="data:image/svg+xml;base64,{{ road_glyph | base64_encode }}">
+            <span class="label label--small label--gray text--center">TOTAL DISTANCE</span>
+            <span class="value value--xsmall value--tnums text--center">
+              {{ ov_distance }}
+               km
+            </span>
+          </div>
+          <div class="w--[1px] h--[68px] bg--gray-55 no-shrink"></div>
+          <div class="flex flex--col flex--center-x flex--center-y gap--xsmall overflow--hidden">
+            <img class="image w--[30px] h--[25px] no-shrink" src="data:image/svg+xml;base64,{{ peak_glyph | base64_encode }}">
+            <span class="label label--small label--gray text--center">TOTAL ELEVATION</span>
+            <span class="value value--xsmall value--tnums text--center">
+              {{ total_climb }}
+               m
+            </span>
+          </div>
+        </div>
+      </div>
+      {%- elsif rest_day -%}
+      <div class="flex flex--row flex--center-y gap--large w--full no-shrink overflow--hidden">
+        <div class="flex flex--col flex--left gap--medium grow overflow--hidden">
+          <div class="flex flex--row flex--left flex--center-y gap--medium no-shrink">
+            {% render 'badge' with text: 'REST DAY' %}
+            {%- if rest_when and rest_when != '' -%}
+              <span class="label label--xsmall">
+                {{ rest_when }}
+              </span>
+            {% endif %}
+          </div>
+          <span class="title title--medium">LEGS UP, WHEELS DOWN</span>
+          <div class="flex flex--row flex--left flex--center-y gap--small flex--wrap">
+            <span class="label label--base">NEXT UP</span>
+            <span class="label label--base value--tnums">
+              STAGE 
+              {{ next_stage_no }}
+            </span>
+            <span class="label label--base">
+              {{ next_start | upcase }}
+               › 
+              {{ next_finish | upcase }}
+            </span>
+          </div>
+        </div>
+        <div class="flex flex--center-y flex--center-x no-shrink">
+          <svg viewBox="0 0 140 53" width="279" height="106" font-size="1" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="12" cy="11" r="0.8" fill="#000"></circle>
+            <circle cx="50" cy="9" r="0.7" fill="#000"></circle>
+            <circle cx="21" cy="25" r="0.6" fill="#000"></circle>
+            <circle cx="31" cy="17" r="9" fill="#000"></circle>
+            <circle cx="35" cy="14" r="8" fill="#fff"></circle>
+            <text transform="translate(88,41) scale(11)" font-weight="bold" fill="#000" style="font-family:'NicoClean','Inter',system-ui,sans-serif">z</text>
+            <text transform="translate(99,32) scale(15)" font-weight="bold" fill="#000" style="font-family:'NicoClean','Inter',system-ui,sans-serif">z</text>
+            <text transform="translate(112,22) scale(21)" font-weight="bold" fill="#000" style="font-family:'NicoClean','Inter',system-ui,sans-serif">Z</text>
+            <path d="M0,53 L0,46 C18,43 30,47 48,46 C70,45 86,48 104,46 C120,44 132,46 140,45 L140,53 Z" fill="#000"></path>
+          </svg>
+        </div>
+      </div>
+      {%- else -%}
+      <div class="flex flex--row flex--center-y gap--large w--full no-shrink overflow--hidden">
+        <div class="flex flex--col flex--left gap--medium grow overflow--hidden">
+          <div class="flex flex--row flex--left flex--center-y gap--medium no-shrink">
+            {% render 'badge' with text: tag %}
+            <span class="label">
+              STAGE 
+              {{ next_stage_no }}
+               · 
+              {{ next_date | upcase }}
+            </span>
+          </div>
+          <span class="title title--medium" data-clamp="2">
+            {{ next_start | upcase }}
+            <span class="px--2">›</span>
+            {{ next_finish | upcase }}
+          </span>
+          <div class="flex flex--row flex--left flex--center-y gap--medium flex--wrap">
+            {%- if next_type and next_type != '' -%}
+              <span class="label label--outline">
+                {{ next_type | upcase }}
+              </span>
+            {% endif %}
+            {%- if next_km and next_km != '' -%}
+              <span class="label label--gray value--tnums">
+                {{ next_km }}
+              </span>
+            {% endif %}
+            {%- if next_gain and next_gain != 0 -%}
+              <span class="flex flex--row flex--center-y gap--xsmall">
+                <img class="image w--[18px] h--[15px] no-shrink" src="data:image/svg+xml;base64,{{ peak_glyph | base64_encode }}">
+                <span class="label label--gray value--tnums">
+                  {{ next_gain }}
+                   m
+                </span>
+              </span>
+            {% endif %}
+          </div>
+        </div>
+        <div class="flex flex--center-y flex--center-x no-shrink">
+          {% render 'stage_profile' with path: profile_path, climbs: profile_climbs, fixedw: 279, h: 106, km: next_km %}
+        </div>
+      </div>
+    {% endif %}
+    <div class="divider mt--2 mb--2"></div>
+    <div class="grid grid--cols-12 gap--large grow w--full">
+      <div class="col--span-6 overflow--hidden">
+        <div class="flex flex--col flex--left gap--medium overflow--hidden w--full">
+          <table class="table table--base w--full">
+            <colgroup>
+              <col class="w--[26px]">
+              <col class="w--[92px]">
+              <col>
+            </colgroup>
+            <tbody>
+              <tr>
+                <td class="pb--2" colspan="3">
+                  {% render 'jersey_panel_portrait' with jersey: trophy_glyph, label: 'STAGE WINNER', name: winner_name, team: winner_team_code, photo: winner_photo, alt: winner_photo_alt, fallback: person_glyph, av_wrap: 'w--[82px] mr--2' %}
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <img class="image w--[24px] h--[24px] no-shrink" src="data:image/svg+xml;base64,{{ jersey_gc | base64_encode }}">
+                </td>
+                <td>
+                  <span class="label label--xsmall label--gray">INDIVIDUAL</span>
+                </td>
+                <td>
+                  <div class="flex flex--row flex--left flex--center-y gap--small overflow--hidden">
+                    <div class="flex flex--center w--[44px] no-shrink">
+                      {% render 'avatar' with url: yellow_photo, size: 38, fallback: person_glyph, alt: yellow_photo_alt %}
+                    </div>
+                    <div class="flex flex--col flex--left gap--none overflow--hidden">
+                      <span class="title title--small">
+                        {{ yellow_name | default: '—' }}
+                      </span>
+                      <span class="label label--xsmall label--gray">
+                        {{ yellow_team_code }}
+                      </span>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <img class="image w--[24px] h--[24px] no-shrink" src="data:image/svg+xml;base64,{{ jersey_pts | base64_encode }}">
+                </td>
+                <td>
+                  <span class="label label--xsmall label--gray">POINTS</span>
+                </td>
+                <td>
+                  <div class="flex flex--row flex--left flex--center-y gap--small overflow--hidden">
+                    <div class="flex flex--center w--[44px] no-shrink">
+                      {% render 'avatar' with url: green_photo, size: 38, fallback: person_glyph, alt: green_photo_alt %}
+                    </div>
+                    <div class="flex flex--col flex--left gap--none overflow--hidden">
+                      <span class="title title--small">
+                        {{ green_name | default: '—' }}
+                      </span>
+                      <span class="label label--xsmall label--gray">
+                        {{ green_team_code }}
+                      </span>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <img class="image w--[24px] h--[24px] no-shrink" src="data:image/svg+xml;base64,{{ jersey_kom | base64_encode }}">
+                </td>
+                <td>
+                  <span class="label label--xsmall label--gray">CLIMBER</span>
+                </td>
+                <td>
+                  <div class="flex flex--row flex--left flex--center-y gap--small overflow--hidden">
+                    <div class="flex flex--center w--[44px] no-shrink">
+                      {% render 'avatar' with url: kom_photo, size: 38, fallback: person_glyph, alt: kom_photo_alt %}
+                    </div>
+                    <div class="flex flex--col flex--left gap--none overflow--hidden">
+                      <span class="title title--small">
+                        {{ kom_name | default: '—' }}
+                      </span>
+                      <span class="label label--xsmall label--gray">
+                        {{ kom_team_code }}
+                      </span>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <img class="image w--[24px] h--[24px] no-shrink" src="data:image/svg+xml;base64,{{ jersey_yth | base64_encode }}">
+                </td>
+                <td>
+                  <span class="label label--xsmall label--gray">YOUNG</span>
+                </td>
+                <td>
+                  <div class="flex flex--row flex--left flex--center-y gap--small overflow--hidden">
+                    <div class="flex flex--center w--[44px] no-shrink">
+                      {% render 'avatar' with url: white_photo, size: 38, fallback: person_glyph, alt: white_photo_alt %}
+                    </div>
+                    <div class="flex flex--col flex--left gap--none overflow--hidden">
+                      <span class="title title--small">
+                        {{ white_name | default: '—' }}
+                      </span>
+                      <span class="label label--xsmall label--gray">
+                        {{ white_team_code }}
+                      </span>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="col--span-6 flex flex--row gap--medium overflow--hidden">
+        <div class="w--[1px] h--full bg--gray-55 no-shrink"></div>
+        <div class="flex flex--col grow gap--medium overflow--hidden">
+          {%- comment -%}
+             X PORTRAIT-only block: stack badge over AFTER, left-aligned (w--full so it hugs left in the centering flex--col parent) 
+          {% endcomment %}
+          <div class="flex flex--col flex--left w--full gap--xsmall">
+            {% render 'badge' with text: 'TOP 5 RANKING' %}
+            <span class="label label--xsmall">
+              AFTER 
+              {{ rank_when }}
+            </span>
+          </div>
+          {%- assign g0 = gc[0] | split: '|||' -%}
+          {%- assign s0 = g0[1] | split: ' ' -%}
+          {%- assign a0 = s0.first | slice: 0 | append: '. ' | append: s0.last -%}
+          {%- assign g1 = gc[1] | split: '|||' -%}
+          {%- assign s1 = g1[1] | split: ' ' -%}
+          {%- assign a1 = s1.first | slice: 0 | append: '. ' | append: s1.last -%}
+          {%- assign g2 = gc[2] | split: '|||' -%}
+          {%- assign s2 = g2[1] | split: ' ' -%}
+          {%- assign a2 = s2.first | slice: 0 | append: '. ' | append: s2.last -%}
+          {%- assign g3 = gc[3] | split: '|||' -%}
+          {%- assign s3 = g3[1] | split: ' ' -%}
+          {%- assign a3 = s3.first | slice: 0 | append: '. ' | append: s3.last -%}
+          {%- assign g4 = gc[4] | split: '|||' -%}
+          {%- assign s4 = g4[1] | split: ' ' -%}
+          {%- assign a4 = s4.first | slice: 0 | append: '. ' | append: s4.last -%}
+          <table class="table table--base w--full">
+            <tbody>
+              <tr>
+                <td class="w--[34px] py--1">
+                  <span class="value value--medium value--tnums">
+                    {{ g0[0] }}
+                  </span>
+                </td>
+                <td class="w--[58px] py--1">
+                  {% render 'avatar' with url: g0[4], size: 50, fallback: person_glyph, alt: g0[5] %}
+                </td>
+                <td class="text--left">
+                  <div class="flex flex--col flex--left gap--none overflow--hidden">
+                    <span class="title title--base">
+                      {{ a0 }}
+                    </span>
+                    <span class="label label--xsmall label--gray">
+                      {{ g0[2] }}
+                    </span>
+                  </div>
+                </td>
+                <td class="w--[92px] text--right">
+                  <span class="value value--xxsmall value--tnums">
+                    {{ g0[3] }}
+                  </span>
+                </td>
+              </tr>
+              <tr>
+                <td class="w--[34px]">
+                  <span class="value value--small value--tnums">
+                    {{ g1[0] }}
+                  </span>
+                </td>
+                <td class="w--[58px]">
+                  {% render 'avatar' with url: g1[4], size: 38, fallback: person_glyph, alt: g1[5] %}
+                </td>
+                <td class="text--left">
+                  <div class="flex flex--col flex--left gap--none overflow--hidden">
+                    <span class="title title--small">
+                      {{ a1 }}
+                    </span>
+                    <span class="label label--xsmall label--gray">
+                      {{ g1[2] }}
+                    </span>
+                  </div>
+                </td>
+                <td class="w--[92px] text--right">
+                  <span class="value value--xxsmall value--tnums">
+                    {{ g1[3] }}
+                  </span>
+                </td>
+              </tr>
+              <tr>
+                <td class="w--[34px]">
+                  <span class="value value--small value--tnums">
+                    {{ g2[0] }}
+                  </span>
+                </td>
+                <td class="w--[58px]">
+                  {% render 'avatar' with url: g2[4], size: 38, fallback: person_glyph, alt: g2[5] %}
+                </td>
+                <td class="text--left">
+                  <div class="flex flex--col flex--left gap--none overflow--hidden">
+                    <span class="title title--small">
+                      {{ a2 }}
+                    </span>
+                    <span class="label label--xsmall label--gray">
+                      {{ g2[2] }}
+                    </span>
+                  </div>
+                </td>
+                <td class="w--[92px] text--right">
+                  <span class="value value--xxsmall value--tnums">
+                    {{ g2[3] }}
+                  </span>
+                </td>
+              </tr>
+              <tr>
+                <td class="w--[34px]">
+                  <span class="value value--small value--tnums">
+                    {{ g3[0] }}
+                  </span>
+                </td>
+                <td class="w--[58px]">
+                  {% render 'avatar' with url: g3[4], size: 38, fallback: person_glyph, alt: g3[5] %}
+                </td>
+                <td class="text--left">
+                  <div class="flex flex--col flex--left gap--none overflow--hidden">
+                    <span class="title title--small">
+                      {{ a3 }}
+                    </span>
+                    <span class="label label--xsmall label--gray">
+                      {{ g3[2] }}
+                    </span>
+                  </div>
+                </td>
+                <td class="w--[92px] text--right">
+                  <span class="value value--xxsmall value--tnums">
+                    {{ g3[3] }}
+                  </span>
+                </td>
+              </tr>
+              <tr>
+                <td class="w--[34px]">
+                  <span class="value value--small value--tnums">
+                    {{ g4[0] }}
+                  </span>
+                </td>
+                <td class="w--[58px]">
+                  {% render 'avatar' with url: g4[4], size: 38, fallback: person_glyph, alt: g4[5] %}
+                </td>
+                <td class="text--left">
+                  <div class="flex flex--col flex--left gap--none overflow--hidden">
+                    <span class="title title--small">
+                      {{ a4 }}
+                    </span>
+                    <span class="label label--xsmall label--gray">
+                      {{ g4[2] }}
+                    </span>
+                  </div>
+                </td>
+                <td class="w--[92px] text--right">
+                  <span class="value value--xxsmall value--tnums">
+                    {{ g4[3] }}
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endif %}
+{% render 'title_bar' with title: feed_title %}
