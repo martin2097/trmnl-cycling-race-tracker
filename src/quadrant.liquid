@@ -1,23 +1,33 @@
 {%- comment -%}
-   QUADRANT (400x240). PRE-RACE: THE TOUR IS COMING countdown + 3 facts (the top
-  half of half_vertical). RACING/REST/OVER: "RESULTS AFTER …" + five rows (stage winner +
-  jersey holders), each [icon][label][avatar · name · team].
+  
+QUADRANT (400x240). PRE-RACE: event countdown + 3 facts (the top
+half of half_vertical). RACING/REST/OVER: "RESULTS AFTER …" + five rows (stage winner +
+jersey holders), each [icon][label][avatar · name · team].
+
 {% endcomment %}
 {%- assign tag = stage_tag | default: 'NEXT STAGE' -%}
 {%- assign wtag = winner_tag | default: 'LAST STAGE WINNER' -%}
-{%- assign rank_when = wtag | remove: ' WINNER' -%}
+{%- assign rank_when = ranking_tag | default: wtag | remove: ' WINNER' -%}
 {%- if pre_race -%}
   {%- assign dist_num = ov_distance | remove: ' km' -%}
   <div class="layout layout--col flex flex--col overflow--hidden h--full lg:portrait:hidden">
     <div class="bg--gray-20 rounded--large grow w--full flex flex--col flex--center-x flex--center-y gap--xsmall p--2 overflow--hidden">
-      <span class="title title--small lg:title--base text--white text--center">THE TOUR IS COMING</span>
-      <span class="value lg:value--large value--tnums text--white">
-        {{ days_to_start }}
+      <span class="title title--small lg:title--base text--white text--center">
+        {{ pre_headline }}
       </span>
-      <span class="label label--xsmall lg:label--large text--white text--center">DAYS TO GO</span>
+      {% if race_day_waiting %}
+        <span class="label label--xsmall lg:label--large text--white text--center">IT'S RACE DAY TODAY!</span>
+        {% else %}
+        <span class="value lg:value--large value--tnums text--white">
+          {{ days_to_start }}
+        </span>
+        <span class="label label--xsmall lg:label--large text--white text--center">DAYS TO GO</span>
+      {% endif %}
     </div>
     {%- comment -%}
-       X landscape: facts share the column with the countdown (lg:grow) so the countdown shrinks a bit 
+      
+X landscape: facts share the column with the countdown (lg:grow) so the countdown shrinks a bit 
+
     {% endcomment %}
     <div class="flex flex--row gap--medium w--full flex--center-y no-shrink lg:grow">
       <div class="grow overflow--hidden">
@@ -32,15 +42,23 @@
     </div>
   </div>
   {%- comment -%}
-     ===== X PORTRAIT: exact copy of half_vertical OG pre-race ===== 
+    
+===== X PORTRAIT: exact copy of half_vertical OG pre-race ===== 
+
   {% endcomment %}
   <div class="hidden lg:portrait:flex flex--col gap--none h--full px--3 pt--2 w--full">
     <div class="bg--gray-20 rounded--large w--full flex flex--col flex--center-x flex--center-y gap--xsmall p--2 no-shrink">
-      <span class="title title--small text--white text--center">THE TOUR IS COMING</span>
-      <span class="value value--tnums text--white">
-        {{ days_to_start }}
+      <span class="title title--small text--white text--center">
+        {{ pre_headline }}
       </span>
-      <span class="title title--small text--white text--center">DAYS TO GO</span>
+      {% if race_day_waiting %}
+        <span class="title title--small text--white text--center">IT'S RACE DAY TODAY!</span>
+        {% else %}
+        <span class="value value--tnums text--white">
+          {{ days_to_start }}
+        </span>
+        <span class="title title--small text--white text--center">DAYS TO GO</span>
+      {% endif %}
     </div>
     <div class="flex flex--row gap--medium w--full flex--center-y no-shrink mt--1">
       <div class="grow overflow--hidden">
@@ -161,13 +179,17 @@
   {%- else -%}
   <div class="layout layout--col gap--none h--full px--2 py--2 lg:portrait:hidden">
     {%- comment -%}
-       ---- X (lg) only: GC TOP 3 ranking squeezed in at top, hidden on OG ----
+      
+---- X (lg) only: GC TOP 3 ranking squeezed in at top, hidden on OG ----
+
     {% endcomment %}
     <div class="hidden lg:flex flex--col gap--xsmall no-shrink mb--1 w--full overflow--hidden">
       <div class="flex flex--row flex--left flex--center-y gap--small no-shrink">
         <span class="bg--black text--white rounded--small px--2 label label--base no-shrink">TOP 3 RANKING</span>
         <span class="label label--xsmall">
-          AFTER
+          
+AFTER
+
           {{ rank_when }}
         </span>
       </div>
@@ -197,7 +219,9 @@
                     {{ q0[1] }}
                   </span>
                   <span class="label label--small label--gray no-shrink">
-                    ·
+                    
+·
+
                     {{ q0[2] }}
                   </span>
                 </div>
@@ -223,7 +247,9 @@
                     {{ q1[1] }}
                   </span>
                   <span class="label label--small label--gray no-shrink">
-                    ·
+                    
+·
+
                     {{ q1[2] }}
                   </span>
                 </div>
@@ -249,7 +275,9 @@
                     {{ q2[1] }}
                   </span>
                   <span class="label label--small label--gray no-shrink">
-                    ·
+                    
+·
+
                     {{ q2[2] }}
                   </span>
                 </div>
@@ -266,7 +294,9 @@
     <div class="flex flex--row flex--left flex--center-y no-shrink mb--1">
       <span class="title title--small hidden lg:block">JERSEY HOLDERS</span>
       <span class="title title--small lg:hidden">
-        RESULTS AFTER
+        
+RESULTS AFTER
+
         {{ rank_when }}
         {{ winner_stage_no }}
       </span>
@@ -397,7 +427,9 @@
     </table>
   </div>
   {%- comment -%}
-     ===== X PORTRAIT: exact copy of half_vertical OG racing / rest / over ===== 
+    
+===== X PORTRAIT: exact copy of half_vertical OG racing / rest / over ===== 
+
   {% endcomment %}
   <div class="hidden lg:portrait:flex flex--col gap--none h--full px--3 py--2 w--full">
     {%- if race_over -%}
@@ -405,7 +437,9 @@
         {% render 'avatar' with url: yellow_photo, size: 92, fallback: person_glyph, alt: yellow_photo_alt %}
         <div class="flex flex--col flex--left gap--xsmall grow overflow--hidden">
           <div class="flex flex--row flex--left no-shrink">
-            <span class="bg--black text--white rounded--small px--2 label no-shrink">TOUR DE FRANCE WINNER</span>
+            <span class="bg--black text--white rounded--small px--2 label no-shrink">
+              {{ winner_label }}
+            </span>
           </div>
           <span class="title title--large">
             {{ yellow_name }}
@@ -429,12 +463,16 @@
         <div class="flex flex--row flex--left flex--center-y gap--small flex--wrap">
           <span class="label label--base">NEXT UP</span>
           <span class="label label--base value--tnums">
-            STAGE 
+            
+STAGE 
+
             {{ next_stage_no }}
           </span>
           <span class="label label--base">
             {{ next_start | upcase }}
-             › 
+            
+› 
+
             {{ next_finish | upcase }}
           </span>
         </div>
@@ -442,12 +480,16 @@
       {%- else -%}
       <div class="flex flex--col gap--xsmall w--full no-shrink overflow--hidden">
         {%- comment -%}
-           X PORTRAIT-only block: stack badge over AFTER, left-aligned (w--full so it hugs left in the centering flex--col parent) 
+          
+X PORTRAIT-only block: stack badge over AFTER, left-aligned (w--full so it hugs left in the centering flex--col parent) 
+
         {% endcomment %}
         <div class="flex flex--col flex--left gap--xsmall no-shrink w--full">
           <span class="bg--black text--white rounded--small px--2 label label--base no-shrink">TOP 3 RANKING</span>
           <span class="label label--xsmall">
-            AFTER 
+            
+AFTER 
+
             {{ rank_when }}
           </span>
         </div>
@@ -649,4 +691,9 @@
     </table>
   </div>
 {% endif %}
-{% render 'title_bar' with title: feed_title %}
+<div class="title_bar">
+  <img class="image image-stroke" src="data:image/svg+xml;base64,{{ svg_logo | base64_encode }}">
+  <span class="title">
+    {{ feed_title }}
+  </span>
+</div>

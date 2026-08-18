@@ -4,15 +4,24 @@
   sample_mode ('race' | 'pre' | 'over') to freeze a frame without the transform. {%- endcomment -%}
 
 {%- assign JPATH = 'M4 5 L9 3 L10 7 L14 7 L15 3 L20 5 L19 11 L16 10 L16 21 L8 21 L8 10 L5 11 Z' -%}
-{%- capture jersey_gc -%}<svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="{{ JPATH }}" fill="#F5D200" stroke="#000" stroke-width="0.8"/></svg>{%- endcapture -%}
+{%- assign gc_fill = '#F5D200' -%}
+{%- assign mountains_dot_fill = '#C0223B' -%}
+{%- if gc_jersey_style == 'red' -%}{%- assign gc_fill = '#C8102E' -%}{%- endif -%}
+{%- if mountains_jersey_style == 'blue-polka' -%}{%- assign mountains_dot_fill = '#1559A6' -%}{%- endif -%}
+{%- capture jersey_gc -%}<svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="{{ JPATH }}" fill="{{ gc_fill }}" stroke="#000" stroke-width="0.8"/></svg>{%- endcapture -%}
 {%- capture jersey_pts -%}<svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="{{ JPATH }}" fill="#16A34A" stroke="#000" stroke-width="0.8"/></svg>{%- endcapture -%}
-{%- capture jersey_kom -%}<svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="{{ JPATH }}" fill="#fff" stroke="#000" stroke-width="0.8"/><g fill="#C0223B"><circle cx="10" cy="11" r="1.1"/><circle cx="14" cy="11" r="1.1"/><circle cx="12" cy="14" r="1.1"/><circle cx="10" cy="17" r="1.1"/><circle cx="14" cy="17" r="1.1"/></g></svg>{%- endcapture -%}
+{%- capture jersey_kom -%}<svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="{{ JPATH }}" fill="#fff" stroke="#000" stroke-width="0.8"/><g fill="{{ mountains_dot_fill }}"><circle cx="10" cy="11" r="1.1"/><circle cx="14" cy="11" r="1.1"/><circle cx="12" cy="14" r="1.1"/><circle cx="10" cy="17" r="1.1"/><circle cx="14" cy="17" r="1.1"/></g></svg>{%- endcapture -%}
 {%- capture jersey_yth -%}<svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="{{ JPATH }}" fill="#fff" stroke="#000" stroke-width="1"/></svg>{%- endcapture -%}
 
 {%- capture person_glyph -%}<svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="18" r="9" fill="#000"/><path d="M6 46 C6 33 16 28 24 28 C32 28 42 33 42 46 Z" fill="#000"/></svg>{%- endcapture -%}
 {%- capture peak_glyph -%}<svg width="13" height="11" viewBox="0 0 13 11" xmlns="http://www.w3.org/2000/svg"><path d="M0.5 10 L4 3 L6 6 L8 2 L12.5 10 Z" fill="#000"/></svg>{%- endcapture -%}
 {%- capture trophy_glyph -%}<svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"><path d="M11 5 h18 v6 a9 9 0 0 1 -18 0 Z" fill="#000"/><path d="M11 6 H6 a4 4 0 0 0 4 5 M29 6 h5 a4 4 0 0 1 -4 5" fill="none" stroke="#000" stroke-width="1.6"/><rect x="18" y="19" width="4" height="6" fill="#000"/><rect x="12" y="25" width="16" height="4" rx="1" fill="#000"/><rect x="10" y="29" width="20" height="4" rx="1" fill="#000"/></svg>{%- endcapture -%}
-{%- capture svg_logo -%}<svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><circle cx="6" cy="18" r="3.2" fill="none" stroke="#000" stroke-width="1.6"/><circle cx="18" cy="18" r="3.2" fill="none" stroke="#000" stroke-width="1.6"/><path d="M6 18 L11 9 L16 9 L18 18" fill="none" stroke="#000" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 6 L13 6 L11 9" fill="none" stroke="#000" stroke-width="1.6"/></svg>{%- endcapture -%}
+{%- capture svg_logo -%}
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="24" height="24">
+<path d="M135.97 107.49C142.71 106.31 153.12 109.92 160.07 110.8C172.28 112.35 184.75 111.7 197.03 111.79C202.13 111.83 211.82 111.87 209.91 119.81C208.32 126.38 194.69 122.17 189.73 123.2C174.64 126.34 169.95 137.87 151.4 131.91C145.86 130.14 134.87 125.62 131.24 121.06C127.09 115.84 129.28 108.65 135.97 107.49ZM391.19 155.02C391.13 156.02 391.74 156.71 391.96 157.68C392.97 162 393.02 166.69 391.9 171.02C388.92 182.52 379.24 190.03 368.32 193.25C365.53 194.07 360.86 195.68 357.94 194.76C353.12 193.23 351.74 187.14 356.06 184.15C358.93 182.17 363.14 182.86 366.45 181.82C375.18 179.08 383.39 170.29 380.85 160.51C377.45 147.42 357.99 151.87 348.17 151.97C344.39 152.01 339.42 151.15 335.84 152.34C336.3 154.81 336.76 157.28 337.21 159.76C335.2 160.69 332.59 160.36 330.47 161.29C328.97 161.96 327.9 163.08 326.26 163.3C324.66 158.67 320.09 148.38 322.18 143.86C324.64 138.55 333.04 140.05 337.67 140.03C352.5 139.98 367.65 140.59 382.42 139.22C386.31 138.86 390 138.39 393.1 135.8C397.23 132.34 397.19 126.81 403.88 126.97C405.89 127.02 407.94 127.75 409.41 129.18C414.2 133.82 410.35 138.03 410.08 143.15C409.93 145.88 411.55 148.63 411.83 151.37C412.19 154.88 411.13 158.37 411.02 161.87C410.89 165.63 410.62 169.46 412.17 172.97C412.83 174.45 414.4 175.54 414.84 177.13C415.19 178.36 414.62 179.76 413.34 180.2C410.6 181.13 408.18 178.06 406.65 176.22C403.42 172.36 401.63 167.2 402.06 162.14C402.31 159.29 403.77 156.1 402.81 153.21C401.18 148.35 393.26 152.5 391.19 155.02ZM174.02 133.11C178.19 144.89 182.36 156.67 186.53 168.46C190.35 169.48 195.35 168.67 199.32 168.64C207.53 168.57 215.75 168.64 223.97 168.64C251.22 168.61 278.46 168.49 305.71 168.6C309.89 168.61 322.03 169.69 325.32 168.56C326.34 168.21 326.67 167.03 327.24 166.25C329.75 162.83 335.49 161.31 339.21 163.31C342.89 165.28 343.04 172 344.31 175.53C348.57 187.38 350.79 199.99 355.48 211.68C358.13 212.12 361.04 210.62 363.72 210.15C367.76 209.46 371.92 209.04 376.03 208.96C394.39 208.63 413.04 213.63 427.56 225.16C478.3 265.44 467.36 346.99 406.66 370.88C348.94 393.59 288.79 342.71 296.1 282.54C299.56 254.12 317.28 231.34 341.85 217.58C340 212.42 338.15 207.25 336.3 202.09C309.56 232.82 282.83 263.56 256.09 294.29C261.13 310.62 259.31 319.37 246.99 331.28C248.56 335.39 250.12 339.5 251.69 343.61C256.61 345.34 264.57 342.12 264.08 350.46C264 351.77 263.6 352.83 262.68 353.79C260.03 356.56 248.9 355.33 244.98 355.33C243.29 355.33 241.07 355.66 239.51 354.83C234.99 352.41 236.91 346.93 240.12 344.52C238.85 341.74 237.57 338.96 236.3 336.18C220.8 339.32 206.66 331.23 201.6 316.22C199.15 318.73 195.44 330.37 192.88 334.66C187.1 344.34 179.53 352.97 170.55 359.84C130.11 390.81 71.53 375.66 49.1 330.6C26.09 284.36 50.23 226.84 100.05 212.13C112.22 208.54 126.02 207.73 138.54 210.18C142.98 211.05 147.43 213.27 151.83 213.78C154.36 211.14 155.47 206.72 157.12 203.47C160.92 196.01 164.34 188.26 168.26 180.79C169.34 178.75 174 171.12 173.8 169.25C173.53 166.73 171.86 163.92 171.08 161.5C168.86 154.57 163.86 143.03 163.11 136.3C166.75 135.24 170.38 134.17 174.02 133.11ZM329.45 182.93C283.4 182.93 237.35 182.93 191.3 182.93C192.88 191.74 196.96 200.55 199.82 209.04C204.89 224.11 209.86 239.2 214.85 254.28C216.82 260.22 218.71 266.19 220.8 272.08C221.55 274.19 221.61 276.84 223.41 278.31C228.79 277.51 234.19 277.53 239.41 279.14C242.13 279.98 244.59 282.39 247.26 282.93C275.13 250.49 303 218.05 330.88 185.62C330.4 184.72 329.93 183.83 329.45 182.93ZM179.22 186.97C177.17 187.63 175.81 192.7 174.83 194.66C172.4 199.51 163.45 215.03 163.07 219.41C167.05 222.56 171.62 225 175.61 228.26C187.33 237.83 196.56 252.16 200.87 266.46C202.19 270.82 203.48 275.62 203.93 280.18C204.27 283.66 203.6 287.94 204.79 291.2C207.16 288.73 209.52 286.26 211.88 283.79C201 251.52 190.11 219.24 179.22 186.97ZM144.82 227.63C136.53 222.85 121.18 223.45 111.96 224.9C65.46 232.23 41.42 284.52 63.16 325.68C87.03 370.87 150.4 372.74 178.19 330.47C182.43 324.02 185.8 316.9 187.52 309.36C182.91 307.22 176.88 307.6 171.92 306.88C159.05 305.02 145.84 303.91 133.11 301.31C128.15 300.3 117.66 301.69 115.2 296C112.85 290.55 118.58 283.37 120.84 278.64C126.58 266.63 132.3 254.56 138.24 242.59C139.75 239.53 145.34 230.53 144.82 227.63ZM347.66 232.19C343.38 231.53 336.75 237.94 333.73 240.79C322.02 251.85 313.99 265.37 311.19 281.26C302.57 330.13 351.22 374.86 399.11 357.75C429.66 346.84 450.26 314.13 444.75 281.51C438.23 242.88 400.38 214.6 361.16 226.26C360.87 230.27 365.17 238.57 366.78 242.61C371.72 254.97 377.06 267.71 381.03 280.43C382.55 285.3 389.26 295.9 381.42 298.95C372.7 302.34 370.93 290.99 368.54 285.56C365.65 279.01 363.47 272.16 360.78 265.53C356.3 254.5 351.45 243.48 347.66 232.19ZM156.39 233.12C147.56 251.24 138.74 269.35 129.91 287.47C133.5 290.17 140.94 289.55 145.37 290.13C155.27 291.44 165.21 292.73 175.1 294.17C179.54 294.82 185.26 296.81 189.65 295.66C190.49 291.41 189.58 287.1 189.09 282.88C186.79 262.94 174.53 242.71 156.39 233.12ZM241.78 319.49C255.04 310.44 242.38 283.43 223.38 291.17C215.15 294.52 209.89 304.89 213.26 313.42C215.73 319.64 223.88 327.53 231.28 324.61C230.89 321.99 229.01 317.84 227.57 315.56C226.53 313.92 224.25 313.5 223.21 311.73C220.64 307.36 222.84 302.05 227.45 300.29C239.03 295.86 236.39 315.15 241.78 319.49Z" fill="#020303" fill-rule="evenodd" stroke="#020303" stroke-width="0.25" stroke-linejoin="round"/>
+</svg>
+{%- endcapture -%}
 
 {%- comment -%} overview pictograms: calendar (dates), checkered flag (stages), distance arrows (km) {%- endcomment -%}
 {%- capture cal_glyph -%}<svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="5" width="18" height="16" rx="2" fill="none" stroke="#000" stroke-width="2"/><line x1="3" y1="9.5" x2="21" y2="9.5" stroke="#000" stroke-width="2"/><line x1="8" y1="3" x2="8" y2="7" stroke="#000" stroke-width="2" stroke-linecap="round"/><line x1="16" y1="3" x2="16" y2="7" stroke="#000" stroke-width="2" stroke-linecap="round"/></svg>{%- endcapture -%}
@@ -67,25 +76,29 @@
 {%- endif -%}
 
 {%- comment -%} no form fields — title comes from the race name produced by transform.py {%- endcomment -%}
-{%- assign feed_title = race_title | default: trmnl.plugin_settings.instance_name | default: 'Tour de France' -%}
+{%- assign feed_title = race_title | default: trmnl.plugin_settings.instance_name | default: 'Cycling Tour Tracker' -%}
 {%- assign race_year = race_title | split: ' ' | first -%}
+{%- assign pre_headline = pre_headline | default: 'THE NEXT TOUR IS COMING' -%}
+{%- assign winner_label = winner_label | default: 'TOUR WINNER' -%}
 
 {%- comment -%} title_bar — shared across all sizes; sibling of layout. params: title {%- endcomment -%}
 {% template title_bar %}<div class="title_bar">
-  <img class="image image-stroke" src="https://upload.wikimedia.org/wikipedia/commons/5/50/Tour_de_France_logo_%28black_background%29.svg">
+  <img class="image image-stroke" src="data:image/svg+xml;base64,##{{ svg_logo | base64_encode }}">
   <span class="title">{{ title }}</span>
 </div>{% endtemplate %}
 
 {%- comment -%} badge — small black pill. params: text {%- endcomment -%}
 {% template badge %}<span class="bg--black text--white rounded--small px--2 label label--xsmall lg:label--large no-shrink">{{ text }}</span>{% endtemplate %}
 
-{%- comment -%} avatar — circular dithered photo, Tissot primary -> alt (Wikipedia) -> glyph via onerror.
-  params: url, size, fallback (svg glyph), alt (optional 2nd-choice photo URL) {%- endcomment -%}
+{%- comment -%} avatar — circular dithered photo, Tissot 2026 -> Tissot 2025 -> Wikipedia -> glyph.
+  params: url, size, fallback (svg glyph), alt (~~~ separated fallback URLs) {%- endcomment -%}
 {% template avatar %}
-  {% assign fb_src = alt %}
-  {% if fb_src == nil or fb_src == '' %}{% capture fb_src %}data:image/svg+xml;base64,{{ fallback | base64_encode }}{% endcapture %}{% endif %}
+  {% assign photo_fallbacks = alt | split: '~~~' %}
+  {% assign second_src = photo_fallbacks[0] %}
+  {% assign final_src = photo_fallbacks[1] %}
+  {% capture glyph_src %}data:image/svg+xml;base64,{{ fallback | base64_encode }}{% endcapture %}
   <div class="bg--white rounded--full no-shrink overflow--hidden flex flex--center w--[{{ size }}px] h--[{{ size }}px]">
-    {% if url and url != '' %}<img class="image image-dither image--cover rounded--full w--full h--full" src="{{ url }}" onerror="this.onerror=null;this.src='{{ fb_src }}'">
+    {% if url and url != '' %}<img class="image image-dither image--cover rounded--full w--full h--full" src="{{ url }}" data-second="{{ second_src }}" data-final="{{ final_src }}" onerror="if(this.dataset.second){this.src=this.dataset.second;this.dataset.second=''}else if(this.dataset.final){this.src=this.dataset.final;this.dataset.final=''}else{this.onerror=null;this.src='{{ glyph_src }}'}">
     {% else %}<img class="image rounded--full w--[55%] h--[55%]" src="data:image/svg+xml;base64,{{ fallback | base64_encode }}">{% endif %}
   </div>
 {% endtemplate %}
@@ -174,6 +187,20 @@
   {% assign sw = fixedw | default: 0 %}
   {% assign cr = circ | default: 3.9 %}
   {% assign cf = cfont | default: 4.4 %}
+  {% assign ep = edgepad | default: 0 %}
+  {% assign sx = 3 %}
+  {% assign ex = 97 %}
+  {% assign xscale = 1.0 %}
+  {% assign leadx = 0 %}
+  {% assign tailx = 100 %}
+  {% if ep > 0 %}
+    {% assign sx = ep %}
+    {% assign ex = 100 | minus: ep %}
+    {% assign innerw = 100 | minus: ep | minus: ep %}
+    {% assign xscale = innerw | divided_by: 100.0 %}
+    {% assign leadx = 0 | minus: ep | divided_by: xscale %}
+    {% assign tailx = 100 | minus: ep | divided_by: xscale %}
+  {% endif %}
   {% assign cy = 4.4 %}
   {% assign ly = cy | plus: cr | plus: 0.4 %}
   {% assign dyv = cf | times: 0.35 %}
@@ -186,23 +213,32 @@
   {% if card and card != '' %}<div class="{{ card }} rounded--large overflow--hidden pt--1{% if sw and sw != 0 %} flex flex--col flex--center-x{% else %} text--center{% endif %}">{% endif %}
   <svg viewBox="0 0 100 38" preserveAspectRatio="none" font-size="1"{% if sw and sw != 0 %} height="{{ h | default: 152 }}" width="{{ sw }}"{% else %} class="w--full"{% endif %}>
     {%- comment -%} silhouette baseline sits on the strip top (y=33) so the ink strip is fully UNDER
-      the route, never overlapping its low parts; strip then runs edge-to-edge to the bottom. {%- endcomment -%}
-    <g transform="translate(0,12.67) scale(1,0.535)">
-      <polygon points="0,38 {{ path }} 100,38" fill="{{ ink }}"></polygon>
-    </g>
+      the route, never overlapping its low parts. On inset variants the real route is remapped into
+      sx..ex, while leadx/tailx extend its baseline back to the card edges. This avoids the apparent
+      vertical crop at both rounded edges without shrinking the edge-to-edge distance strip. {%- endcomment -%}
+    {% if path and path != '' %}
+      <g transform="translate({{ ep }},12.67) scale({{ xscale }},0.535)">
+        <polygon points="{{ leadx }},38 {{ path }} {{ tailx }},38" fill="{{ ink }}"></polygon>
+      </g>
+    {% else %}
+      <text x="50" y="19" text-anchor="middle" font-size="5" font-weight="bold" fill="#000">PROFILE PENDING</text>
+    {% endif %}
     {%- comment -%} bottom ink strip + distance markers (0 km left, total km right, in white) {%- endcomment -%}
     <rect x="0" y="33" width="100" height="5" fill="{{ ink }}"></rect>
-    <text transform="translate(3,36.7) scale(3)" fill="#fff" style="font-family:'NicoClean','Inter',system-ui,sans-serif">0 km</text>
-    {% if km and km != '' %}<text transform="translate(97,36.7) scale(3)" fill="#fff" text-anchor="end" style="font-family:'NicoClean','Inter',system-ui,sans-serif">{{ km }}</text>{% endif %}
+    <text transform="translate({{ sx }},36.7) scale(3)" fill="#fff" style="font-family:'NicoClean','Inter',system-ui,sans-serif">0 km</text>
+    {% if km and km != '' %}<text transform="translate({{ ex }},36.7) scale(3)" fill="#fff" text-anchor="end" style="font-family:'NicoClean','Inter',system-ui,sans-serif">{{ km }}</text>{% endif %}
     {% for c in climbs %}
       {% assign cp = c | split: '|||' %}
       {%- comment -%} cdx = spread-out circle x (field 6); the elbow connector still points to the TRUE x (field 1).
         jy steps up per climb so neighbouring corners don't merge into one horizontal line {%- endcomment -%}
-      {% assign cdx = cp[6] | default: cp[1] %}
+      {% assign cdx = cp[6] | default: cp[1] | plus: 0 %}
+      {% if ep > 0 and cdx < ep %}{% assign cdx = ep %}{% endif %}
+      {% if ep > 0 and cdx > ex %}{% assign cdx = ex %}{% endif %}
+      {% assign truex = cp[1] | plus: 0 | times: xscale | plus: ep %}
       {% assign jstep = forloop.index0 | times: 1.0 %}
       {% assign jy = 12.6 | minus: jstep %}
       {% if jy < 9.0 %}{% assign jy = 9.0 %}{% endif %}
-      <polyline points="{{ cdx }},{{ ly }} {{ cdx }},{{ jy }} {{ cp[1] }},{{ jy }} {{ cp[1] }},33" fill="none" stroke="{{ ink }}" stroke-width="0.3" stroke-dasharray="1,1"></polyline>
+      <polyline points="{{ cdx }},{{ ly }} {{ cdx }},{{ jy }} {{ truex }},{{ jy }} {{ truex }},33" fill="none" stroke="{{ ink }}" stroke-width="0.3" stroke-dasharray="1,1"></polyline>
       <circle cx="{{ cdx }}" cy="{{ cy }}" r="{{ cr }}" fill="#fff" stroke="#000" stroke-width="0.5"></circle>
       <text transform="translate({{ cdx }},{{ cy }}) scale({{ cf }})" dy="0.35" font-weight="bold" text-anchor="middle" fill="#000" style="font-family:'NicoClean','Inter',system-ui,sans-serif">{{ cp[0] }}</text>
     {% endfor %}
