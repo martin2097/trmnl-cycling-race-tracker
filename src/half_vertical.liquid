@@ -1,22 +1,32 @@
 {%- comment -%}
-   HALF VERTICAL (400x480). PRE-RACE: countdown + 3 stats + last-year jersey
-  winners. RACING/REST/OVER: next-stage text + stage winner + jersey holders. 
+  
+HALF VERTICAL (400x480). PRE-RACE: countdown + 3 stats + last-year jersey
+winners. RACING/REST/OVER: next-stage text + stage winner + jersey holders. 
+
 {% endcomment %}
 {%- assign tag = stage_tag | default: 'NEXT STAGE' -%}
 {%- assign wtag = winner_tag | default: 'LAST STAGE WINNER' -%}
-{%- assign rank_when = wtag | remove: ' WINNER' -%}
+{%- assign rank_when = ranking_tag | default: wtag | remove: ' WINNER' -%}
 {%- if pre_race -%}
   {%- assign dist_num = ov_distance | remove: ' km' -%}
   <div class="layout layout--col gap--none h--full px--3 py--2">
     {%- comment -%}
-       countdown: bigger on X (lg:grow fills the top portion; OG keeps compact no-shrink) 
+      
+countdown: bigger on X (lg:grow fills the top portion; OG keeps compact no-shrink) 
+
     {% endcomment %}
     <div class="bg--gray-20 rounded--large w--full flex flex--col flex--center-x flex--center-y gap--xsmall p--4 no-shrink lg:py--8">
-      <span class="title title--small lg:title--large text--white text--center">THE TOUR IS COMING</span>
-      <span class="value value--tnums lg:value--mega text--white">
-        {{ days_to_start }}
+      <span class="title title--small lg:title--large text--white text--center">
+        {{ pre_headline }}
       </span>
-      <span class="title title--small lg:title--large text--white text--center">DAYS TO GO</span>
+      {% if race_day_waiting %}
+        <span class="title title--small lg:title--large text--white text--center">IT'S RACE DAY TODAY!</span>
+        {% else %}
+        <span class="value value--tnums lg:value--mega text--white">
+          {{ days_to_start }}
+        </span>
+        <span class="title title--small lg:title--large text--white text--center">DAYS TO GO</span>
+      {% endif %}
     </div>
     <div class="grow"></div>
     <div class="flex flex--row gap--medium w--full flex--center-y no-shrink mt--2">
@@ -136,7 +146,9 @@
       </tbody>
     </table>
     {%- comment -%}
-       X PORTRAIT: jersey winners as 2x2 quadrants (table hidden above) 
+      
+X PORTRAIT: jersey winners as 2x2 quadrants (table hidden above) 
+
     {% endcomment %}
     <div class="hidden lg:portrait:block w--full no-shrink mt--2">
       <div class="grid grid--cols-2 gap--small w--full">
@@ -155,14 +167,18 @@
       </div>
     </div>
     {%- comment -%}
-       X PORTRAIT only: first-stage text + profile (landscape deletes this, uses space for the rest) 
+      
+X PORTRAIT only: first-stage text + profile (landscape deletes this, uses space for the rest) 
+
     {% endcomment %}
     <div class="grow lg:hidden lg:portrait:visible"></div>
   </div>
   {%- else -%}
   <div class="layout layout--col gap--none h--full px--3 py--2">
     {%- comment -%}
-       X PORTRAIT: 4 equal grow spacers distribute the 3 sections with even gaps above/below 
+      
+X PORTRAIT: 4 equal grow spacers distribute the 3 sections with even gaps above/below 
+
     {% endcomment %}
     <div class="hidden lg:portrait:block grow no-shrink"></div>
     {%- if race_over -%}
@@ -170,7 +186,9 @@
         {% render 'avatar' with url: yellow_photo, size: 92, fallback: person_glyph, alt: yellow_photo_alt %}
         <div class="flex flex--col flex--left gap--xsmall grow overflow--hidden">
           <div class="flex flex--row flex--left no-shrink">
-            <span class="bg--black text--white rounded--small px--2 label lg:label--large lg:portrait:label--base no-shrink">TOUR DE FRANCE WINNER</span>
+            <span class="bg--black text--white rounded--small px--2 label lg:label--large lg:portrait:label--base no-shrink">
+              {{ winner_label }}
+            </span>
           </div>
           <span class="title title--large">
             {{ yellow_name }}
@@ -194,45 +212,63 @@
         <div class="flex flex--row flex--left flex--center-y gap--small flex--wrap">
           <span class="label label--base">NEXT UP</span>
           <span class="label label--base value--tnums">
-            STAGE 
+            
+STAGE 
+
             {{ next_stage_no }}
           </span>
           <span class="label label--base">
             {{ next_start | upcase }}
-             › 
+            
+› 
+
             {{ next_finish | upcase }}
           </span>
         </div>
         <div class="hidden lg:portrait:block w--full no-shrink mt--2">
           {%- comment -%}
-             fat standard rest card (same as full-view landscape), not the thin wide banner 
+            
+fat standard rest card (same as full-view landscape), not the thin wide banner 
+
           {% endcomment %}
           {% render 'rest_graphic' %}
         </div>
       </div>
       {%- else -%}
       {%- comment -%}
-         next-stage info: hidden on OG, shown on ALL X (lg, both orientations). Uses plain lg: because the lg:landscape: compound selector doesn't match this DOM 
+        
+next-stage info: hidden on OG, shown on ALL X (lg, both orientations). Uses plain lg: because the lg:landscape: compound selector doesn't match this DOM 
+
       {% endcomment %}
       <div class="hidden lg:flex flex--col flex--left gap--medium w--full no-shrink overflow--hidden">
         <div class="flex flex--row flex--left flex--center-y gap--medium no-shrink lg:portrait:hidden">
           {% render 'badge' with text: tag %}
           <span class="label lg:label--large">
-            STAGE 
+            
+STAGE 
+
             {{ next_stage_no }}
-          ·
+            
+·
+
             {{ next_date | upcase }}
           </span>
         </div>
         {%- comment -%}
-           X PORTRAIT: stacked, left-aligned (static flex--col flex--left works in pinned framework; responsive lg:portrait:flex--left does not) 
+          
+X PORTRAIT: stacked, left-aligned (static flex--col flex--left works in pinned framework; responsive lg:portrait:flex--left does not) 
+
         {% endcomment %}
         <div class="hidden lg:portrait:flex flex--col flex--left gap--xsmall no-shrink">
           {% render 'badge' with text: tag %}
           <span class="label lg:label--large">
-            STAGE 
+            
+STAGE 
+
             {{ next_stage_no }}
-             · 
+            
+· 
+
             {{ next_date | upcase }}
           </span>
         </div>
@@ -257,23 +293,31 @@
               <img class="image w--[18px] h--[15px] no-shrink" src="data:image/svg+xml;base64,{{ peak_glyph | base64_encode }}">
               <span class="label label--base label--gray value--tnums">
                 {{ next_gain }}
-                 m
+                
+m
+
               </span>
             </span>
           {% endif %}
         </div>
       </div>
       {%- comment -%}
-         X PORTRAIT: stage profile under the text info 
+        
+X PORTRAIT: stage profile under the text info 
+
       {% endcomment %}
       {%- comment -%}
-         TOP 3 is OG-only: base flex shows it, lg:hidden hides it on ALL X (X shows next-stage instead). Clean — no landscape:/lg: specificity tie 
+        
+TOP 3 is OG-only: base flex shows it, lg:hidden hides it on ALL X (X shows next-stage instead). Clean — no landscape:/lg: specificity tie 
+
       {% endcomment %}
       <div class="flex flex--col gap--small w--full no-shrink overflow--hidden lg:hidden">
         <div class="flex flex--row flex--left flex--center-y gap--small no-shrink">
           <span class="bg--black text--white rounded--small px--2 label label--base no-shrink">TOP 3 RANKING</span>
           <span class="label label--xsmall">
-            AFTER 
+            
+AFTER 
+
             {{ rank_when }}
           </span>
         </div>
@@ -497,7 +541,9 @@
       </tbody>
     </table>
     {%- comment -%}
-       ---- X (lg) only: GC TOP 5 ranking (as on OG full), hidden on OG ---- 
+      
+---- X (lg) only: GC TOP 5 ranking (as on OG full), hidden on OG ---- 
+
     {% endcomment %}
     <div class="hidden lg:portrait:block grow no-shrink"></div>
     <div class="hidden lg:flex flex--col gap--medium w--full no-shrink">
@@ -505,17 +551,23 @@
       <div class="flex flex--row flex--left w--full lg:portrait:hidden">
         {% render 'badge' with text: 'TOP 5 RANKING' %}
         <span class="label label--xsmall">
-          AFTER 
+          
+AFTER 
+
           {{ rank_when }}
         </span>
       </div>
       {%- comment -%}
-         X PORTRAIT: stacked, left-aligned. w--full needed because parent block is flex--col (centers children); flex--left then hugs the left edge 
+        
+X PORTRAIT: stacked, left-aligned. w--full needed because parent block is flex--col (centers children); flex--left then hugs the left edge 
+
       {% endcomment %}
       <div class="hidden lg:portrait:flex flex--col flex--left w--full gap--xsmall no-shrink">
         {% render 'badge' with text: 'TOP 5 RANKING' %}
         <span class="label label--xsmall">
-          AFTER 
+          
+AFTER 
+
           {{ rank_when }}
         </span>
       </div>
@@ -667,4 +719,9 @@
     <div class="hidden lg:portrait:block grow no-shrink"></div>
   </div>
 {% endif %}
-{% render 'title_bar' with title: feed_title %}
+<div class="title_bar">
+  <img class="image image-stroke" src="data:image/svg+xml;base64,{{ svg_logo | base64_encode }}">
+  <span class="title">
+    {{ feed_title }}
+  </span>
+</div>

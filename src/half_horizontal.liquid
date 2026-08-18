@@ -1,28 +1,46 @@
 {%- comment -%}
-   HALF HORIZONTAL (800x240). PRE-RACE: countdown panel + 3 stats on the LEFT,
-  last-year jersey winners on the RIGHT. RACING/REST/OVER: next-stage text + stage winner on
-  the LEFT, jersey holders on the RIGHT.
+  
+  
+HALF HORIZONTAL (800x240). PRE-RACE: countdown panel + 3 stats on the LEFT,
+last-year jersey winners on the RIGHT. RACING/REST/OVER: next-stage text + stage winner on
+the LEFT, jersey holders on the RIGHT.
+
+
 {% endcomment %}
 {%- assign tag = stage_tag | default: 'NEXT STAGE' -%}
 {%- assign wtag = winner_tag | default: 'LAST STAGE WINNER' -%}
-{%- assign rank_when = wtag | remove: ' WINNER' -%}
+{%- assign rank_when = ranking_tag | default: wtag | remove: ' WINNER' -%}
 {%- if pre_race -%}
   {%- assign dist_num = ov_distance | remove: ' km' -%}
   <div class="layout layout--col gap--none h--full px--3 py--2 lg:portrait:hidden">
     <div class="grid grid--cols-12 gap--large grow w--full overflow--hidden">
       {%- comment -%}
-         LEFT: THE TOUR IS COMING countdown filling the quarter + 3 stats
+        
+        
+LEFT: event-specific pre-race countdown filling the quarter + 3 stats
+
+      
       {% endcomment %}
       <div class="col--span-6 flex flex--col gap--small overflow--hidden h--full">
         <div class="bg--gray-20 rounded--large grow w--full flex flex--col flex--center-x flex--center-y gap--xsmall p--2 overflow--hidden">
-          <span class="title title--small text--white text--center">THE TOUR IS COMING</span>
-          <span class="value value--tnums text--white">
-            {{ days_to_start }}
+          <span class="title title--small text--white text--center">
+            {{ pre_headline }}
           </span>
-          <span class="label label--xsmall text--white text--center">DAYS TO GO</span>
+          {% if race_day_waiting %}
+            <span class="label label--xsmall text--white text--center">IT'S RACE DAY TODAY!</span>
+            {% else %}
+            <span class="value value--tnums text--white">
+              {{ days_to_start }}
+            </span>
+            <span class="label label--xsmall text--white text--center">DAYS TO GO</span>
+          {% endif %}
         </div>
         {%- comment -%}
-           X landscape: facts share the column with the countdown (lg:grow) so the countdown shrinks a bit 
+          
+          
+X landscape: facts share the column with the countdown (lg:grow) so the countdown shrinks a bit 
+
+        
         {% endcomment %}
         <div class="flex flex--row gap--medium w--full flex--center-y no-shrink lg:grow">
           <div class="grow overflow--hidden">
@@ -37,7 +55,11 @@
         </div>
       </div>
       {%- comment -%}
-         RIGHT: LAST YEAR JERSEY WINNERS title + jersey table
+        
+        
+RIGHT: LAST YEAR JERSEY WINNERS title + jersey table
+
+      
       {% endcomment %}
       <div class="col--span-6 gap--medium overflow--hidden">
         <div class="w--[1px] h--full bg--gray-50 no-shrink"></div>
@@ -145,7 +167,11 @@
             </tbody>
           </table>
           {%- comment -%}
-             X LANDSCAPE: first-stage info under the jersey holders (hidden on OG + X portrait) 
+            
+            
+X LANDSCAPE: first-stage info under the jersey holders (hidden on OG + X portrait) 
+
+          
           {% endcomment %}
           <div class="hidden lg:flex lg:portrait:hidden flex--col flex--left gap--xsmall w--full no-shrink">
             <div class="divider mb--1 w--full"></div>
@@ -161,7 +187,11 @@
                   </div>
                   <span class="title title--small" data-clamp="2">
                     {{ next_start | upcase }}
-                 › 
+                    
+                    
+› 
+
+                    
                     {{ next_finish | upcase }}
                   </span>
                   <div class="flex flex--row flex--left flex--center-y gap--xsmall flex--wrap">
@@ -180,7 +210,11 @@
                         <img class="image w--[12px] h--[10px] no-shrink" src="data:image/svg+xml;base64,{{ peak_glyph | base64_encode }}">
                         <span class="label label--xsmall label--gray value--tnums">
                           {{ next_gain }}
-                       m
+                          
+                          
+m
+
+                        
                         </span>
                       </span>
                     {% endif %}
@@ -197,18 +231,28 @@
     </div>
   </div>
   {%- comment -%}
-     ===== X PORTRAIT: exact copy of full OG pre-race ===== 
+    
+    
+===== X PORTRAIT: exact copy of full OG pre-race ===== 
+
+  
   {% endcomment %}
   <div class="layout layout--col gap--none h--full px--3 py--2 hidden lg:portrait:visible">
     <div class="hidden flex flex--col gap--none h--full w--full">
       <div class="grid grid--cols-12 gap--large grow w--full">
         <div class="col--span-4 h--full">
           <div class="bg--gray-20 rounded--large h--full w--full flex flex--col flex--center-x flex--center-y gap--medium p--6 overflow--hidden">
-            <span class="title title--large text--white text--center">THE TOUR IS COMING</span>
-            <span class="value value--mega value--tnums text--white">
-              {{ days_to_start }}
+            <span class="title title--large text--white text--center">
+              {{ pre_headline }}
             </span>
-            <span class="title text--white text--center">DAYS TO GO</span>
+            {% if race_day_waiting %}
+              <span class="title text--white text--center">IT'S RACE DAY TODAY!</span>
+              {% else %}
+              <span class="value value--mega value--tnums text--white">
+                {{ days_to_start }}
+              </span>
+              <span class="title text--white text--center">DAYS TO GO</span>
+            {% endif %}
           </div>
         </div>
         <div class="col--span-8 flex flex--col h--full overflow--hidden">
@@ -341,7 +385,11 @@
                 </div>
                 <span class="title title--small" data-clamp="2">
                   {{ next_start | upcase }}
-                 › 
+                  
+                  
+› 
+
+                  
                   {{ next_finish | upcase }}
                 </span>
                 <div class="flex flex--row flex--left flex--center-y gap--xsmall flex--wrap">
@@ -360,7 +408,11 @@
                       <img class="image w--[12px] h--[10px] no-shrink" src="data:image/svg+xml;base64,{{ peak_glyph | base64_encode }}">
                       <span class="label label--xsmall label--gray value--tnums">
                         {{ next_gain }}
-                       m
+                        
+                        
+m
+
+                      
                       </span>
                     </span>
                   {% endif %}
@@ -378,15 +430,23 @@
   {%- else -%}
   <div class="layout layout--col gap--none h--full px--3 py--2 lg:portrait:hidden">
     {%- comment -%}
-       OG grid: LEFT stage banner + winner, RIGHT jersey holders (hidden on X)
+      
+      
+OG grid: LEFT stage banner + winner, RIGHT jersey holders (hidden on X)
+
+    
     {% endcomment %}
     <div class="grid grid--cols-12 gap--large grow w--full overflow--hidden lg:hidden">
       {%- comment -%}
-         LEFT (6/12): next-stage text (no profile) + stage winner
+        
+        
+LEFT (6/12): next-stage text (no profile) + stage winner
+
+      
       {% endcomment %}
       <div class="col--span-6 flex flex--col gap--small overflow--hidden h--full">
         {%- if race_over -%}
-          {%- assign champ_tag = 'TOUR DE FRANCE WINNER' -%}
+          {%- assign champ_tag = winner_label -%}
           <div class="flex flex--row flex--left flex--center-y gap--medium w--full no-shrink overflow--hidden">
             {% render 'avatar' with url: yellow_photo, size: 85, fallback: person_glyph, alt: yellow_photo_alt %}
             <div class="flex flex--col flex--left gap--xsmall grow overflow--hidden">
@@ -415,12 +475,20 @@
             <div class="flex flex--row flex--left flex--center-y gap--small flex--wrap">
               <span class="label label--base">NEXT UP</span>
               <span class="label label--base value--tnums">
-                STAGE
+                
+                
+STAGE
+
+                
                 {{ next_stage_no }}
               </span>
               <span class="label label--base">
                 {{ next_start | upcase }}
-                 ›
+                
+                
+›
+
+                
                 {{ next_finish | upcase }}
               </span>
             </div>
@@ -430,9 +498,17 @@
             <div class="flex flex--row flex--left flex--center-y gap--medium no-shrink">
               {% render 'badge' with text: tag %}
               <span class="label label--xsmall">
-                STAGE
+                
+                
+STAGE
+
+                
                 {{ next_stage_no }}
-              ·
+                
+                
+·
+
+                
                 {{ next_date | upcase }}
               </span>
             </div>
@@ -457,7 +533,11 @@
                   <img class="image w--[18px] h--[15px] no-shrink" src="data:image/svg+xml;base64,{{ peak_glyph | base64_encode }}">
                   <span class="label label--base label--gray value--tnums 1bit:text--black">
                     {{ next_gain }}
-                     m
+                    
+                    
+m
+
+                  
                   </span>
                 </span>
               {% endif %}
@@ -481,7 +561,11 @@
         </div>
       </div>
       {%- comment -%}
-         RIGHT (6/12): jersey holders, rows fill the height
+        
+        
+RIGHT (6/12): jersey holders, rows fill the height
+
+      
       {% endcomment %}
       <div class="col--span-6 flex flex--row gap--medium overflow--hidden">
         <div class="w--[1px] h--full bg--gray-55 no-shrink"></div>
@@ -591,7 +675,11 @@
       </div>
     </div>
     {%- comment -%}
-       ---- X (lg) only: swapped — LEFT stage winner + jersey holders, RIGHT stage banner + TOP 3 ----
+      
+      
+---- X (lg) only: swapped — LEFT stage winner + jersey holders, RIGHT stage banner + TOP 3 ----
+
+    
     {% endcomment %}
     <div class="hidden lg:grid grid--cols-12 gap--large grow w--full overflow--hidden">
       <div class="col--span-6 flex flex--col gap--small overflow--hidden h--full">
@@ -600,7 +688,7 @@
             {% render 'avatar' with url: yellow_photo, size: 70, fallback: person_glyph, alt: yellow_photo_alt %}
             <div class="flex flex--col flex--left gap--xsmall grow overflow--hidden">
               <div class="flex flex--row flex--left no-shrink">
-                {% render 'badge' with text: 'TOUR DE FRANCE WINNER' %}
+                {% render 'badge' with text: winner_label %}
               </div>
               <span class="title title--medium">
                 {{ yellow_name }}
@@ -624,12 +712,20 @@
             <div class="flex flex--row flex--left flex--center-y gap--small flex--wrap">
               <span class="label label--base">NEXT UP</span>
               <span class="label label--base value--tnums">
-                STAGE
+                
+                
+STAGE
+
+                
                 {{ next_stage_no }}
               </span>
               <span class="label label--base">
                 {{ next_start | upcase }}
-                 ›
+                
+                
+›
+
+                
                 {{ next_finish | upcase }}
               </span>
             </div>
@@ -639,9 +735,17 @@
             <div class="flex flex--row flex--left flex--center-y gap--medium no-shrink">
               {% render 'badge' with text: tag %}
               <span class="label lg:label--large">
-                STAGE
+                
+                
+STAGE
+
+                
                 {{ next_stage_no }}
-                 ·
+                
+                
+·
+
+                
                 {{ next_date | upcase }}
               </span>
             </div>
@@ -666,7 +770,11 @@
                   <img class="image w--[18px] h--[15px] no-shrink" src="data:image/svg+xml;base64,{{ peak_glyph | base64_encode }}">
                   <span class="label label--base label--gray value--tnums">
                     {{ next_gain }}
-                     m
+                    
+                    
+m
+
+                  
                   </span>
                 </span>
               {% endif %}
@@ -677,7 +785,11 @@
         <div class="flex flex--row flex--left w--full no-shrink">
           {% render 'badge' with text: 'TOP 3 RANKING' %}
           <span class="label label--xsmall">
-            AFTER
+            
+            
+AFTER
+
+            
             {{ rank_when }}
           </span>
         </div>
@@ -888,11 +1000,15 @@
     </div>
   </div>
   {%- comment -%}
-     ===== X PORTRAIT: exact copy of full OG racing / rest / over ===== 
+    
+    
+===== X PORTRAIT: exact copy of full OG racing / rest / over ===== 
+
+  
   {% endcomment %}
   <div class="hidden lg:portrait:flex flex--col gap--none h--full px--3 py--2 w--full">
     {%- if race_over -%}
-      {%- assign champ_tag = 'TOUR DE FRANCE WINNER' -%}
+      {%- assign champ_tag = winner_label -%}
       {%- assign pgc0 = gc[0] | split: '|||' -%}
       <div class="flex flex--row flex--center-y gap--large w--full no-shrink overflow--hidden">
         <div class="flex flex--row flex--left flex--center-y gap--medium grow overflow--hidden">
@@ -923,7 +1039,11 @@
             <span class="label label--small label--gray text--center">TOTAL DISTANCE</span>
             <span class="value value--xsmall value--tnums text--center">
               {{ ov_distance }}
-               km
+              
+              
+km
+
+            
             </span>
           </div>
           <div class="w--[1px] h--[68px] bg--gray-55 no-shrink"></div>
@@ -932,7 +1052,11 @@
             <span class="label label--small label--gray text--center">TOTAL ELEVATION</span>
             <span class="value value--xsmall value--tnums text--center">
               {{ total_climb }}
-               m
+              
+              
+m
+
+            
             </span>
           </div>
         </div>
@@ -952,12 +1076,20 @@
           <div class="flex flex--row flex--left flex--center-y gap--small flex--wrap">
             <span class="label label--base">NEXT UP</span>
             <span class="label label--base value--tnums">
-              STAGE 
+              
+              
+STAGE 
+
+              
               {{ next_stage_no }}
             </span>
             <span class="label label--base">
               {{ next_start | upcase }}
-               › 
+              
+              
+› 
+
+              
               {{ next_finish | upcase }}
             </span>
           </div>
@@ -982,9 +1114,17 @@
           <div class="flex flex--row flex--left flex--center-y gap--medium no-shrink">
             {% render 'badge' with text: tag %}
             <span class="label">
-              STAGE 
+              
+              
+STAGE 
+
+              
               {{ next_stage_no }}
-               · 
+              
+              
+· 
+
+              
               {{ next_date | upcase }}
             </span>
           </div>
@@ -1009,7 +1149,11 @@
                 <img class="image w--[18px] h--[15px] no-shrink" src="data:image/svg+xml;base64,{{ peak_glyph | base64_encode }}">
                 <span class="label label--gray value--tnums">
                   {{ next_gain }}
-                   m
+                  
+                  
+m
+
+                
                 </span>
               </span>
             {% endif %}
@@ -1136,12 +1280,20 @@
         <div class="w--[1px] h--full bg--gray-55 no-shrink"></div>
         <div class="flex flex--col grow gap--medium overflow--hidden">
           {%- comment -%}
-             X PORTRAIT-only block: stack badge over AFTER, left-aligned (w--full so it hugs left in the centering flex--col parent) 
+            
+            
+X PORTRAIT-only block: stack badge over AFTER, left-aligned (w--full so it hugs left in the centering flex--col parent) 
+
+          
           {% endcomment %}
           <div class="flex flex--col flex--left w--full gap--xsmall">
             {% render 'badge' with text: 'TOP 5 RANKING' %}
             <span class="label label--xsmall">
-              AFTER 
+              
+              
+AFTER 
+
+              
               {{ rank_when }}
             </span>
           </div>
@@ -1294,4 +1446,9 @@
     </div>
   </div>
 {% endif %}
-{% render 'title_bar' with title: feed_title %}
+<div class="title_bar">
+  <img class="image image-stroke" src="data:image/svg+xml;base64,{{ svg_logo | base64_encode }}">
+  <span class="title">
+    {{ feed_title }}
+  </span>
+</div>
