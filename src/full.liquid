@@ -1,31 +1,53 @@
 {%- assign tag = stage_tag | default: 'NEXT STAGE' -%}
 {%- assign wtag = winner_tag | default: 'LAST STAGE WINNER' -%}
-{%- assign rank_when = wtag | remove: ' WINNER' -%}
+{%- assign rank_when = ranking_tag | default: wtag | remove: ' WINNER' -%}
 {%- if pre_race -%}
   {%- comment -%}
+    
+    
 ===================== PRE-RACE OVERVIEW =====================
+
+  
   {% endcomment %}
   {%- assign dist_num = ov_distance | remove: ' km' -%}
   <div class="layout layout--col gap--none h--full">
     <div class="grid grid--cols-12 gap--large grow w--full">
       {%- comment -%}
-    ---- LEFT: centered countdown panel, dark-gray (col 4/12) ----
+        
+        
+---- LEFT: centered countdown panel, dark-gray (col 4/12) ----
+
+      
       {% endcomment %}
       <div class="col--span-4 lg:col--span-5 lg:portrait:col--span-12 h--full">
         <div class="bg--gray-20 rounded--large h--full w--full flex flex--col flex--center-x flex--center-y gap--medium p--6 overflow--hidden">
-          <span class="title title--large lg:title--xlarge lg:portrait:title--xlarge text--white text--center">THE TOUR IS COMING</span>
-          <span class="value value--mega lg:value--giga lg:portrait:value--giga value--tnums text--white">
-            {{ days_to_start }}
+          <span class="title title--large lg:title--xlarge lg:portrait:title--xlarge text--white text--center">
+            {{ pre_headline }}
           </span>
-          <span class="title lg:title--large lg:portrait:title--large text--white text--center">DAYS TO GO</span>
+          {% if race_day_waiting %}
+            <span class="title lg:title--large lg:portrait:title--large text--white text--center">IT'S RACE DAY TODAY!</span>
+            {% else %}
+            <span class="value value--mega lg:value--giga lg:portrait:value--giga value--tnums text--white">
+              {{ days_to_start }}
+            </span>
+            <span class="title lg:title--large lg:portrait:title--large text--white text--center">DAYS TO GO</span>
+          {% endif %}
         </div>
       </div>
       {%- comment -%}
-    ---- RIGHT: 3 sections, flush top/bottom, even gaps between (col 8/12) ----
+        
+        
+---- RIGHT: 3 sections, flush top/bottom, even gaps between (col 8/12) ----
+
+      
       {% endcomment %}
       <div class="col--span-8 lg:col--span-7 lg:portrait:col--span-12 flex flex--col h--full overflow--hidden">
         {%- comment -%}
-      overview (flush to top)
+          
+          
+overview (flush to top)
+
+        
         {% endcomment %}
         <div class="flex flex--col w--full no-shrink pt--4">
           <div class="flex flex--row gap--medium w--full flex--center-y">
@@ -41,16 +63,28 @@
           </div>
         </div>
         {%- comment -%}
-      jersey holders
+          
+          
+jersey holders
+
+        
         {% endcomment %}
         <div class="divider mt--2 mb--2"></div>
         <span class="title title--small lg:title--base">LAST YEAR JERSEY WINNERS</span>
         <div class="flex flex--col w--full no-shrink">
           {%- comment -%}
-        X LANDSCAPE: 2x2 (lg:grid--cols-2); OG keeps 1x4 (grid--cols-4) 
+            
+            
+X LANDSCAPE: 2x2 (lg:grid--cols-2); OG keeps 1x4 (grid--cols-4) 
+
+          
           {% endcomment %}
           {%- comment -%}
-        OG 1x4 · X landscape 2x2 · X portrait 1x4 (all in line) 
+            
+            
+OG 1x4 · X landscape 2x2 · X portrait 1x4 (all in line) 
+
+          
           {% endcomment %}
           <div class="grid grid--cols-4 lg:grid--cols-2 lg:portrait:grid--cols-4 gap--medium w--full">
             <div class="overflow--hidden">
@@ -68,13 +102,21 @@
           </div>
         </div>
         {%- comment -%}
-      stage 1 (flush to bottom): rule + text (left) + profile (right)
+          
+          
+stage 1 (flush to bottom): rule + text (left) + profile (right)
+
+        
         {% endcomment %}
         <div class="divider mt--2 mb--2"></div>
         <div class="flex flex--col w--full no-shrink">
           <span class="title title--small lg:title--base lg:pb--2">STARTING OF WITH ...</span>
           {%- comment -%}
-        X: profile drops to its own full-width line (lg:col--span-12); OG keeps text|profile side by side 
+            
+            
+X: profile drops to its own full-width line (lg:col--span-12); OG keeps text|profile side by side 
+
+          
           {% endcomment %}
           <div class="grid grid--cols-12 gap--medium w--full">
             <div class="col--span-6 flex flex--col flex--center-y gap--xsmall overflow--hidden">
@@ -86,7 +128,11 @@
               </div>
               <span class="title title--small" data-clamp="2">
                 {{ next_start | upcase }}
-              ›
+                
+                
+›
+
+                
                 {{ next_finish | upcase }}
               </span>
               <div class="flex flex--row flex--left flex--center-y gap--xsmall flex--wrap">
@@ -105,7 +151,11 @@
                     <img class="image w--[12px] h--[10px] no-shrink" src="data:image/svg+xml;base64,{{ peak_glyph | base64_encode }}">
                     <span class="label label--gray value--tnums 1bit:text--black">
                       {{ next_gain }}
-                  m
+                      
+                      
+m
+
+                    
                     </span>
                   </span>
                 {% endif %}
@@ -113,13 +163,21 @@
             </div>
             <div class="col--span-6 flex flex--center-y flex--center-x overflow--hidden">
               {%- comment -%}
-            small profile: OG + X portrait (text|profile side by side); hidden on X landscape 
+                
+                
+small profile: OG + X portrait (text|profile side by side); hidden on X landscape 
+
+              
               {% endcomment %}
               <div class="flex lg:hidden flex--center-y flex--center-x">
                 {% render 'stage_profile' with path: profile_path, climbs: profile_climbs, fixedw: 205, h: 78, circ: 4.5, cfont: 4.2, km: next_km %}
               </div>
               {%- comment -%}
-            big profile: X LANDSCAPE only — fills its own full-width line (~double height + width) 
+                
+                
+big profile: X LANDSCAPE only — fills its own full-width line (~double height + width) 
+
+              
               {% endcomment %}
               <div class="hidden lg:flex flex--center-x">
                 {% render 'stage_profile' with path: profile_path, climbs: profile_climbs, fixedw: 263, h: 100, circ: 4.5, cfont: 4.2, km: next_km %}
@@ -132,11 +190,19 @@
   </div>
   {%- else -%}
   {%- comment -%}
+    
+    
 ===================== RACING / RACE-OVER =====================
+
+  
   {% endcomment %}
   <div class="layout layout--col gap--none h--full px--3 py--2">
     {%- comment -%}
-  ---- TOP: full-width stage banner (text left + fixed-proportion profile right) ----
+      
+      
+---- TOP: full-width stage banner (text left + fixed-proportion profile right) ----
+
+    
     {% endcomment %}
     {%- if race_over -%}
       {%- assign gc0 = gc[0] | split: '|||' -%}
@@ -145,9 +211,11 @@
           {% render 'avatar' with url: yellow_photo, size: 92, fallback: person_glyph, alt: yellow_photo_alt %}
           <div class="flex flex--col flex--left gap--xsmall grow overflow--hidden">
             <div class="flex flex--row flex--left no-shrink">
-              <span class="bg--black text--white rounded--small px--2 label lg:label--large lg:portrait:label--base no-shrink">TOUR DE FRANCE WINNER</span>
+              <span class="bg--black text--white rounded--small px--2 label lg:label--large lg:portrait:label--base no-shrink">
+                {{ winner_label }}
+              </span>
             </div>
-            <span class="title title--xlarge">
+            <span class="title lg:title--xlarge">
               {{ yellow_name }}
             </span>
             <span class="label label--gray 1bit:text--black">
@@ -169,7 +237,11 @@
             <span class="label label--small label--gray text--center 1bit:text--black">TOTAL DISTANCE</span>
             <span class="value value--xsmall value--tnums text--center">
               {{ ov_distance }}
-          km
+              
+              
+km
+
+            
             </span>
           </div>
           <div class="w--[1px] h--[68px] bg--gray-55 no-shrink"></div>
@@ -178,14 +250,22 @@
             <span class="label label--small label--gray text--center 1bit:text--black">TOTAL ELEVATION</span>
             <span class="value value--xsmall value--tnums text--center">
               {{ total_climb }}
-          m
+              
+              
+m
+
+            
             </span>
           </div>
         </div>
       </div>
       {%- elsif rest_day -%}
       {%- comment -%}
-  ---- REST DAY: "sleeping" graphic, sized/gated like the stage profile ---- 
+        
+        
+---- REST DAY: "sleeping" graphic, sized/gated like the stage profile ---- 
+
+      
       {% endcomment %}
       <div class="flex flex--row flex--center-y gap--large w--full no-shrink overflow--hidden">
         <div class="flex flex--col flex--left gap--medium grow overflow--hidden">
@@ -201,12 +281,20 @@
           <div class="flex flex--row flex--left flex--center-y gap--small flex--wrap">
             <span class="label label--base lg:label--large">NEXT UP</span>
             <span class="label label--base lg:label--large value--tnums">
-          STAGE 
+              
+              
+STAGE 
+
+              
               {{ next_stage_no }}
             </span>
             <span class="label label--base lg:label--large">
               {{ next_start | upcase }}
-          › 
+              
+              
+› 
+
+              
               {{ next_finish | upcase }}
             </span>
           </div>
@@ -221,7 +309,11 @@
         </div>
       </div>
       {%- comment -%}
-  X PORTRAIT: sleeping graphic stacked under the text — wide-flat banner (2x width, half height) for a natural fit 
+        
+        
+X PORTRAIT: sleeping graphic stacked under the text — wide-flat banner (2x width, half height) for a natural fit 
+
+      
       {% endcomment %}
       <div class="hidden lg:portrait:block w--full no-shrink mt--8 mb--2">
         <div class="w--full">
@@ -234,9 +326,17 @@
           <div class="flex flex--row flex--left flex--center-y gap--medium no-shrink">
             {% render 'badge' with text: tag %}
             <span class="label lg:label--large">
-          STAGE
+              
+              
+STAGE
+
+              
               {{ next_stage_no }}
-          ·
+              
+              
+·
+
+              
               {{ next_date | upcase }}
               {{ race_year }}
             </span>
@@ -262,7 +362,11 @@
                 <img class="image w--[18px] h--[15px] no-shrink" src="data:image/svg+xml;base64,{{ peak_glyph | base64_encode }}">
                 <span class="label lg:label--large label--gray value--tnums 1bit:text--black">
                   {{ next_gain }}
-            m
+                  
+                  
+m
+
+                
                 </span>
               </span>
             {% endif %}
@@ -271,14 +375,18 @@
         <div class="flex flex--center-y flex--center-x no-shrink lg:hidden">
           {% render 'stage_profile' with path: profile_path, climbs: profile_climbs, fixedw: 279, h: 106, km: next_km %}
         </div>
-        <div class="hidden lg:visible lg:portrait:hidden">
+        <div class="hidden lg:visible lg:portrait:hidden mr--4">
           <div class="flex flex--center-y flex--center-x no-shrink">
-            {% render 'stage_profile' with path: profile_path, climbs: profile_climbs, fixedw: 419, h: 159, km: next_km %}
+            {% render 'stage_profile' with path: profile_path, climbs: profile_climbs, fixedw: 326, h: 124, edgepad: 5, km: next_km %}
           </div>
         </div>
       </div>
       {%- comment -%}
-  X PORTRAIT: profile stacked UNDER the stage text
+        
+        
+X PORTRAIT: profile stacked UNDER the stage text
+
+      
       {% endcomment %}
       <div class="hidden lg:portrait:flex flex--row flex--center-y gap--large w--full no-shrink mt--2">
         <div class="flex flex--col flex--center-x flex--center-y gap--medium grow overflow--hidden">
@@ -297,7 +405,11 @@
               <img class="image w--[18px] h--[15px] no-shrink" src="data:image/svg+xml;base64,{{ peak_glyph | base64_encode }}">
               <span class="label label--xlarge label--gray value--tnums">
                 {{ next_gain }}
-          m
+                
+                
+m
+
+              
               </span>
             </span>
           {% endif %}
@@ -309,16 +421,28 @@
     {% endif %}
     <div class="divider mt--2 mb--2"></div>
     {%- comment -%}
-  ---- BOTTOM: GC top 5 (left) + last winner &amp; jersey leaders (right) ----
+      
+      
+---- BOTTOM: GC top 5 (left) + last winner &amp; jersey leaders (right) ----
+
+    
     {% endcomment %}
     <div class="grid grid--cols-12 gap--large grow w--full">
       {%- comment -%}
-    ---- left (6/12): last winner (row 1) + jersey leaders. Same table--base
-    + sizes as the GC table on the right, so all 5 rows line up across the divider ----
+        
+        
+---- left (6/12): last winner (row 1) + jersey leaders. Same table--base
++ sizes as the GC table on the right, so all 5 rows line up across the divider ----
+
+      
       {% endcomment %}
       <div class="col--span-6 overflow--hidden">
         {%- comment -%}
-      ---- OG (md): winner + jersey rows in one table (unchanged), hidden on X ----
+          
+          
+---- OG (md): winner + jersey rows in one table (unchanged), hidden on X ----
+
+        
         {% endcomment %}
         <div class="flex flex--col flex--left gap--medium overflow--hidden lg:hidden w--full">
           <table class="table table--base w--full">
@@ -449,7 +573,11 @@
           </table>
         </div>
         {%- comment -%}
-      ---- X (lg): winner (kept as-is) + jersey holders as 2x2 grid ----
+          
+          
+---- X (lg): winner (kept as-is) + jersey holders as 2x2 grid ----
+
+        
         {% endcomment %}
         <div class="hidden lg:flex flex--col flex--left gap--medium overflow--hidden">
           <div class="flex flex--row flex--left flex--center-y gap--small overflow--hidden lg:portrait:hidden">
@@ -491,7 +619,11 @@
             </div>
           </div>
           {%- comment -%}
-        X PORTRAIT: 4 jersey tiles stacked vertically (keep tiles, not a table)
+            
+            
+X PORTRAIT: 4 jersey tiles stacked vertically (keep tiles, not a table)
+
+          
           {% endcomment %}
           <div class="hidden lg:portrait:flex flex--left flex--col gap--none w--full grow">
             <div class="grow overflow--hidden">
@@ -517,18 +649,30 @@
         </div>
       </div>
       {%- comment -%}
-    ---- right (6/12): GC top 5 (OG) / top 10 (X), leader emphasized ----
+        
+        
+---- right (6/12): GC top 5 (OG) / top 10 (X), leader emphasized ----
+
+      
       {% endcomment %}
       <div class="col--span-6 flex flex--row gap--medium overflow--hidden">
         <div class="w--[1px] h--full bg--gray-55 no-shrink"></div>
         {%- comment -%}
-      ---- OG (md): GC top 5, hidden on X ----
+          
+          
+---- OG (md): GC top 5, hidden on X ----
+
+        
         {% endcomment %}
         <div class="flex flex--col grow gap--medium overflow--hidden lg:hidden">
           <div class="flex flex--row flex--left w--full">
             {% render 'badge' with text: 'TOP 5 RANKING' %}
             <span class="label label--xsmall">
-            AFTER
+              
+              
+AFTER
+
+              
               {{ rank_when }}
             </span>
           </div>
@@ -678,22 +822,38 @@
           </table>
         </div>
         {%- comment -%}
-      ---- X (lg): GC top 10, leader emphasized ----
+          
+          
+---- X (lg): GC top 10, leader emphasized ----
+
+        
         {% endcomment %}
         <div class="hidden lg:flex flex--col grow gap--medium overflow--hidden">
           <div class="flex flex--row flex--left w--full">
             {% render 'badge' with text: 'TOP 10 RANKING' %}
             <span class="label lg:portrait:hidden">
-            AFTER
+              
+              
+AFTER
+
+              
               {{ rank_when }}
             </span>
           </div>
           <span class="hidden lg:portrait:visible label text--left w--full">
-          AFTER
+            
+            
+AFTER
+
+            
             {{ rank_when }}
           </span>
           {%- comment -%}
-        unrolled rows (no Liquid block tags inside  — see table-render gotcha)
+            
+            
+unrolled rows (no Liquid block tags inside  — see table-render gotcha)
+
+          
           {% endcomment %}
           {%- assign t0 = gc[0] | split: '|||' -%}
           {%- assign t1 = gc[1] | split: '|||' -%}
@@ -964,4 +1124,9 @@
     </div>
   </div>
 {% endif %}
-{% render 'title_bar' with title: feed_title %}
+<div class="title_bar">
+  <img class="image image-stroke" src="data:image/svg+xml;base64,{{ svg_logo | base64_encode }}">
+  <span class="title">
+    {{ feed_title }}
+  </span>
+</div>
