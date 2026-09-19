@@ -1,11 +1,17 @@
+{%- if calendar_pending -%}
+  <div class="layout layout--col flex--center gap--medium">
+    <span class="title text--center">MORE RACING TO COME</span>
+    <span class="label text--center">Waiting for the next event calendar</span>
+  </div>
+  {% render 'title_bar' with title: feed_title, svg_logo: svg_logo %}
+{%- elsif one_day -%}
+  {% render 'one_day_view' with cal_glyph: cal_glyph, road_glyph: road_glyph, peak_glyph: peak_glyph, pre_headline: pre_headline, size: 'half_horizontal', results_pending: results_pending, race_day_waiting: race_day_waiting, days_to_start: days_to_start, ov_date: ov_date, next_start: next_start, next_finish: next_finish, next_type: next_type, next_km: next_km, next_gain: next_gain, profile_path: profile_path, profile_climbs: profile_climbs, gc: gc, ranking_tag: ranking_tag, pre_race: pre_race, person_glyph: person_glyph, winner_label: winner_label, gc_photo: gc_photo, gc_photo_alt: gc_photo_alt, gc_name: gc_name, gc_team_code: gc_team_code %}
+  {% render 'title_bar' with title: feed_title, svg_logo: svg_logo %}
+{%- else -%}
 {%- comment -%}
-  
-  
 HALF HORIZONTAL (800x240). PRE-RACE: countdown panel + 3 stats on the LEFT,
 last-year jersey winners on the RIGHT. RACING/REST/OVER: next-stage text + stage winner on
 the LEFT, jersey holders on the RIGHT.
-
-
 {% endcomment %}
 {%- assign tag = stage_tag | default: 'NEXT STAGE' -%}
 {%- assign wtag = winner_tag | default: 'LAST STAGE WINNER' -%}
@@ -15,11 +21,7 @@ the LEFT, jersey holders on the RIGHT.
   <div class="layout layout--col gap--none h--full px--3 py--2 lg:portrait:hidden">
     <div class="grid grid--cols-12 gap--large grow w--full overflow--hidden">
       {%- comment -%}
-        
-        
 LEFT: event-specific pre-race countdown filling the quarter + 3 stats
-
-      
       {% endcomment %}
       <div class="col--span-6 flex flex--col gap--small overflow--hidden h--full">
         <div class="bg--gray-20 rounded--large grow w--full flex flex--col flex--center-x flex--center-y gap--xsmall p--2 overflow--hidden">
@@ -36,11 +38,7 @@ LEFT: event-specific pre-race countdown filling the quarter + 3 stats
           {% endif %}
         </div>
         {%- comment -%}
-          
-          
-X landscape: facts share the column with the countdown (lg:grow) so the countdown shrinks a bit 
-
-        
+X landscape: facts share the column with the countdown (lg:grow) so the countdown shrinks a bit
         {% endcomment %}
         <div class="flex flex--row gap--medium w--full flex--center-y no-shrink lg:grow">
           <div class="grow overflow--hidden">
@@ -55,11 +53,7 @@ X landscape: facts share the column with the countdown (lg:grow) so the countdow
         </div>
       </div>
       {%- comment -%}
-        
-        
 RIGHT: LAST YEAR JERSEY WINNERS title + jersey table
-
-      
       {% endcomment %}
       <div class="col--span-6 gap--medium overflow--hidden">
         <div class="w--[1px] h--full bg--gray-50 no-shrink"></div>
@@ -167,11 +161,7 @@ RIGHT: LAST YEAR JERSEY WINNERS title + jersey table
             </tbody>
           </table>
           {%- comment -%}
-            
-            
-X LANDSCAPE: first-stage info under the jersey holders (hidden on OG + X portrait) 
-
-          
+X LANDSCAPE: first-stage info under the jersey holders (hidden on OG + X portrait)
           {% endcomment %}
           <div class="hidden lg:flex lg:portrait:hidden flex--col flex--left gap--xsmall w--full no-shrink">
             <div class="divider mb--1 w--full"></div>
@@ -187,11 +177,7 @@ X LANDSCAPE: first-stage info under the jersey holders (hidden on OG + X portrai
                   </div>
                   <span class="title title--small" data-clamp="2">
                     {{ next_start | upcase }}
-                    
-                    
-› 
-
-                    
+›
                     {{ next_finish | upcase }}
                   </span>
                   <div class="flex flex--row flex--left flex--center-y gap--xsmall flex--wrap">
@@ -210,11 +196,7 @@ X LANDSCAPE: first-stage info under the jersey holders (hidden on OG + X portrai
                         <img class="image w--[12px] h--[10px] no-shrink" src="data:image/svg+xml;base64,{{ peak_glyph | base64_encode }}">
                         <span class="label label--xsmall label--gray value--tnums">
                           {{ next_gain }}
-                          
-                          
 m
-
-                        
                         </span>
                       </span>
                     {% endif %}
@@ -231,11 +213,7 @@ m
     </div>
   </div>
   {%- comment -%}
-    
-    
-===== X PORTRAIT: exact copy of full OG pre-race ===== 
-
-  
+===== X PORTRAIT: exact copy of full OG pre-race =====
   {% endcomment %}
   <div class="layout layout--col gap--none h--full px--3 py--2 hidden lg:portrait:visible">
     <div class="hidden flex flex--col gap--none h--full w--full">
@@ -385,11 +363,7 @@ m
                 </div>
                 <span class="title title--small" data-clamp="2">
                   {{ next_start | upcase }}
-                  
-                  
-› 
-
-                  
+›
                   {{ next_finish | upcase }}
                 </span>
                 <div class="flex flex--row flex--left flex--center-y gap--xsmall flex--wrap">
@@ -408,11 +382,7 @@ m
                       <img class="image w--[12px] h--[10px] no-shrink" src="data:image/svg+xml;base64,{{ peak_glyph | base64_encode }}">
                       <span class="label label--xsmall label--gray value--tnums">
                         {{ next_gain }}
-                        
-                        
 m
-
-                      
                       </span>
                     </span>
                   {% endif %}
@@ -430,19 +400,11 @@ m
   {%- else -%}
   <div class="layout layout--col gap--none h--full px--3 py--2 lg:portrait:hidden">
     {%- comment -%}
-      
-      
 OG grid: LEFT stage banner + winner, RIGHT jersey holders (hidden on X)
-
-    
     {% endcomment %}
     <div class="grid grid--cols-12 gap--large grow w--full overflow--hidden lg:hidden">
       {%- comment -%}
-        
-        
 LEFT (6/12): next-stage text (no profile) + stage winner
-
-      
       {% endcomment %}
       <div class="col--span-6 flex flex--col gap--small overflow--hidden h--full">
         {%- if race_over -%}
@@ -475,20 +437,12 @@ LEFT (6/12): next-stage text (no profile) + stage winner
             <div class="flex flex--row flex--left flex--center-y gap--small flex--wrap">
               <span class="label label--base">NEXT UP</span>
               <span class="label label--base value--tnums">
-                
-                
 STAGE
-
-                
                 {{ next_stage_no }}
               </span>
               <span class="label label--base">
                 {{ next_start | upcase }}
-                
-                
 ›
-
-                
                 {{ next_finish | upcase }}
               </span>
             </div>
@@ -498,17 +452,9 @@ STAGE
             <div class="flex flex--row flex--left flex--center-y gap--medium no-shrink">
               {% render 'badge' with text: tag %}
               <span class="label label--xsmall">
-                
-                
 STAGE
-
-                
                 {{ next_stage_no }}
-                
-                
 ·
-
-                
                 {{ next_date | upcase }}
               </span>
             </div>
@@ -533,11 +479,7 @@ STAGE
                   <img class="image w--[18px] h--[15px] no-shrink" src="data:image/svg+xml;base64,{{ peak_glyph | base64_encode }}">
                   <span class="label label--base label--gray value--tnums 1bit:text--black">
                     {{ next_gain }}
-                    
-                    
 m
-
-                  
                   </span>
                 </span>
               {% endif %}
@@ -561,11 +503,7 @@ m
         </div>
       </div>
       {%- comment -%}
-        
-        
 RIGHT (6/12): jersey holders, rows fill the height
-
-      
       {% endcomment %}
       <div class="col--span-6 flex flex--row gap--medium overflow--hidden">
         <div class="w--[1px] h--full bg--gray-55 no-shrink"></div>
@@ -675,11 +613,7 @@ RIGHT (6/12): jersey holders, rows fill the height
       </div>
     </div>
     {%- comment -%}
-      
-      
 ---- X (lg) only: swapped — LEFT stage winner + jersey holders, RIGHT stage banner + TOP 3 ----
-
-    
     {% endcomment %}
     <div class="hidden lg:grid grid--cols-12 gap--large grow w--full overflow--hidden">
       <div class="col--span-6 flex flex--col gap--small overflow--hidden h--full">
@@ -712,20 +646,12 @@ RIGHT (6/12): jersey holders, rows fill the height
             <div class="flex flex--row flex--left flex--center-y gap--small flex--wrap">
               <span class="label label--base">NEXT UP</span>
               <span class="label label--base value--tnums">
-                
-                
 STAGE
-
-                
                 {{ next_stage_no }}
               </span>
               <span class="label label--base">
                 {{ next_start | upcase }}
-                
-                
 ›
-
-                
                 {{ next_finish | upcase }}
               </span>
             </div>
@@ -735,17 +661,9 @@ STAGE
             <div class="flex flex--row flex--left flex--center-y gap--medium no-shrink">
               {% render 'badge' with text: tag %}
               <span class="label lg:label--large">
-                
-                
 STAGE
-
-                
                 {{ next_stage_no }}
-                
-                
 ·
-
-                
                 {{ next_date | upcase }}
               </span>
             </div>
@@ -770,11 +688,7 @@ STAGE
                   <img class="image w--[18px] h--[15px] no-shrink" src="data:image/svg+xml;base64,{{ peak_glyph | base64_encode }}">
                   <span class="label label--base label--gray value--tnums">
                     {{ next_gain }}
-                    
-                    
 m
-
-                  
                   </span>
                 </span>
               {% endif %}
@@ -785,11 +699,7 @@ m
         <div class="flex flex--row flex--left w--full no-shrink">
           {% render 'badge' with text: 'TOP 3 RANKING' %}
           <span class="label label--xsmall">
-            
-            
 AFTER
-
-            
             {{ rank_when }}
           </span>
         </div>
@@ -1000,11 +910,7 @@ AFTER
     </div>
   </div>
   {%- comment -%}
-    
-    
-===== X PORTRAIT: exact copy of full OG racing / rest / over ===== 
-
-  
+===== X PORTRAIT: exact copy of full OG racing / rest / over =====
   {% endcomment %}
   <div class="hidden lg:portrait:flex flex--col gap--none h--full px--3 py--2 w--full">
     {%- if race_over -%}
@@ -1039,11 +945,7 @@ AFTER
             <span class="label label--small label--gray text--center">TOTAL DISTANCE</span>
             <span class="value value--xsmall value--tnums text--center">
               {{ ov_distance }}
-              
-              
 km
-
-            
             </span>
           </div>
           <div class="w--[1px] h--[68px] bg--gray-55 no-shrink"></div>
@@ -1052,11 +954,7 @@ km
             <span class="label label--small label--gray text--center">TOTAL ELEVATION</span>
             <span class="value value--xsmall value--tnums text--center">
               {{ total_climb }}
-              
-              
 m
-
-            
             </span>
           </div>
         </div>
@@ -1076,20 +974,12 @@ m
           <div class="flex flex--row flex--left flex--center-y gap--small flex--wrap">
             <span class="label label--base">NEXT UP</span>
             <span class="label label--base value--tnums">
-              
-              
-STAGE 
-
-              
+STAGE
               {{ next_stage_no }}
             </span>
             <span class="label label--base">
               {{ next_start | upcase }}
-              
-              
-› 
-
-              
+›
               {{ next_finish | upcase }}
             </span>
           </div>
@@ -1114,17 +1004,9 @@ STAGE
           <div class="flex flex--row flex--left flex--center-y gap--medium no-shrink">
             {% render 'badge' with text: tag %}
             <span class="label">
-              
-              
-STAGE 
-
-              
+STAGE
               {{ next_stage_no }}
-              
-              
-· 
-
-              
+·
               {{ next_date | upcase }}
             </span>
           </div>
@@ -1149,11 +1031,7 @@ STAGE
                 <img class="image w--[18px] h--[15px] no-shrink" src="data:image/svg+xml;base64,{{ peak_glyph | base64_encode }}">
                 <span class="label label--gray value--tnums">
                   {{ next_gain }}
-                  
-                  
 m
-
-                
                 </span>
               </span>
             {% endif %}
@@ -1280,20 +1158,12 @@ m
         <div class="w--[1px] h--full bg--gray-55 no-shrink"></div>
         <div class="flex flex--col grow gap--medium overflow--hidden">
           {%- comment -%}
-            
-            
-X PORTRAIT-only block: stack badge over AFTER, left-aligned (w--full so it hugs left in the centering flex--col parent) 
-
-          
+X PORTRAIT-only block: stack badge over AFTER, left-aligned (w--full so it hugs left in the centering flex--col parent)
           {% endcomment %}
           <div class="flex flex--col flex--left w--full gap--xsmall">
             {% render 'badge' with text: 'TOP 5 RANKING' %}
             <span class="label label--xsmall">
-              
-              
-AFTER 
-
-              
+AFTER
               {{ rank_when }}
             </span>
           </div>
@@ -1452,3 +1322,4 @@ AFTER
     {{ feed_title }}
   </span>
 </div>
+{% endif %}
