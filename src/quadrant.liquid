@@ -1,3 +1,13 @@
+{%- if calendar_pending -%}
+  <div class="layout layout--col flex--center gap--medium">
+    <span class="title text--center">MORE RACING TO COME</span>
+    <span class="label text--center">Waiting for the next event calendar</span>
+  </div>
+  {% render 'title_bar' with title: feed_title, svg_logo: svg_logo %}
+{%- elsif one_day -%}
+  {% render 'one_day_view' with cal_glyph: cal_glyph, road_glyph: road_glyph, peak_glyph: peak_glyph, pre_headline: pre_headline, size: 'quadrant', results_pending: results_pending, race_day_waiting: race_day_waiting, days_to_start: days_to_start, ov_date: ov_date, next_start: next_start, next_finish: next_finish, next_type: next_type, next_km: next_km, next_gain: next_gain, profile_path: profile_path, profile_climbs: profile_climbs, gc: gc, ranking_tag: ranking_tag, pre_race: pre_race, person_glyph: person_glyph, winner_label: winner_label, gc_photo: gc_photo, gc_photo_alt: gc_photo_alt, gc_name: gc_name, gc_team_code: gc_team_code %}
+  {% render 'title_bar' with title: feed_title, svg_logo: svg_logo %}
+{%- else -%}
 {%- comment -%}
   
 QUADRANT (400x240). PRE-RACE: event countdown + 3 facts (the top
@@ -697,3 +707,4 @@ AFTER
     {{ feed_title }}
   </span>
 </div>
+{% endif %}
