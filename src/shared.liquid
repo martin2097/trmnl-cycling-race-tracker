@@ -83,12 +83,218 @@
 
 {%- comment -%} title_bar — shared across all sizes; sibling of layout. params: title {%- endcomment -%}
 {% template title_bar %}<div class="title_bar">
-  <img class="image image-stroke" src="data:image/svg+xml;base64,##{{ svg_logo | base64_encode }}">
+  <img class="image image-stroke" src="data:image/svg+xml;base64,{{ svg_logo | base64_encode }}">
   <span class="title">{{ title }}</span>
 </div>{% endtemplate %}
 
 {%- comment -%} badge — small black pill. params: text {%- endcomment -%}
 {% template badge %}<span class="bg--black text--white rounded--small px--2 label label--xsmall lg:label--large no-shrink">{{ text }}</span>{% endtemplate %}
+
+{% template one_day_countdown %}
+  {% case size %}
+    {% when 'portrait_horizontal' %}
+      {% assign panel_classes = 'h--full gap--medium p--6 overflow--hidden' %}
+      {% assign heading_classes = 'title--large' %}
+      {% assign number_classes = 'value--mega' %}
+      {% assign caption_classes = 'title' %}
+    {% when 'portrait_quadrant' %}
+      {% assign panel_classes = 'gap--xsmall p--2 no-shrink' %}
+      {% assign heading_classes = 'title--small' %}
+      {% assign number_classes = '' %}
+      {% assign caption_classes = 'title title--small' %}
+    {% when 'full' %}
+      {% assign panel_classes = 'h--full gap--medium p--6 overflow--hidden' %}
+      {% assign heading_classes = 'title--large lg:title--xlarge lg:portrait:title--xlarge' %}
+      {% assign number_classes = 'value--mega lg:value--giga lg:portrait:value--giga' %}
+      {% assign caption_classes = 'title lg:title--large lg:portrait:title--large' %}
+    {% when 'half_vertical' %}
+      {% assign panel_classes = 'gap--xsmall p--4 no-shrink lg:py--8' %}
+      {% assign heading_classes = 'title--small lg:title--large' %}
+      {% assign number_classes = 'lg:value--mega' %}
+      {% assign caption_classes = 'title title--small lg:title--large' %}
+    {% when 'quadrant' %}
+      {% assign panel_classes = 'grow gap--xsmall p--2 overflow--hidden' %}
+      {% assign heading_classes = 'title--small lg:title--base' %}
+      {% assign number_classes = 'lg:value--large' %}
+      {% assign caption_classes = 'label label--xsmall lg:label--large' %}
+    {% else %}
+      {% assign panel_classes = 'grow gap--xsmall p--2 overflow--hidden' %}
+      {% assign heading_classes = 'title--small' %}
+      {% assign number_classes = '' %}
+      {% assign caption_classes = 'label label--xsmall' %}
+  {% endcase %}
+<div class="bg--gray-20 rounded--large w--full flex flex--col flex--center-x flex--center-y {{ panel_classes }}">
+  <span class="title {{ heading_classes }} text--white text--center">{{ pre_headline }}</span>
+  {% if results_pending %}
+    <span class="{{ caption_classes }} text--white text--center">AWAITING RESULTS</span>
+  {% elsif race_day_waiting %}
+    <span class="{{ caption_classes }} text--white text--center">IT'S RACE DAY TODAY!</span>
+  {% else %}
+    <span class="value {{ number_classes }} value--tnums text--white">{{ days_to_start }}</span>
+    <span class="{{ caption_classes }} text--white text--center">{% if days_to_start == 1 %}DAY TO GO{% else %}DAYS TO GO{% endif %}</span>
+  {% endif %}
+</div>
+{% endtemplate %}
+
+{%- comment -%}One-day views adapt the Tour's existing overview, jersey-card,
+winner-header and ranking-table patterns. Icon stats, typography, separators,
+and portrait-specific compositions intentionally match those views.{%- endcomment -%}
+{% template one_day_stats %}
+  {% assign distance = next_km | remove: ' km' %}
+  <div class="flex flex--row gap--medium w--full flex--center-y no-shrink">
+    <div class="grow overflow--hidden">{% render 'stat_cell' with icon: cal_glyph, value: ov_date, unit: '' %}</div>
+    <div class="grow overflow--hidden">{% render 'stat_cell' with icon: road_glyph, value: distance, unit: 'KM' %}</div>
+    <div class="grow overflow--hidden">{% render 'stat_cell' with icon: peak_glyph, value: next_gain, unit: 'M ↑' %}</div>
+  </div>
+{% endtemplate %}
+
+{% template one_day_podium %}
+  <div class="flex flex--col gap--small w--full h--full overflow--hidden">
+    <span class="title title--small {% if cards %}lg:title--base{% endif %} no-shrink">{{ ranking_tag }}</span>
+    {% if cards %}
+    <div class="grid {% if narrow %}grid--cols-2{% else %}grid--cols-3 lg:grid--cols-2 lg:portrait:grid--cols-3{% endif %} gap--medium w--full grow">
+      {% for packed in gc limit: 3 %}{% assign row = packed | split: '|||' %}
+      <div class="flex flex--col flex--center-x flex--center-y gap--xsmall overflow--hidden {% if forloop.first %}{% if narrow %}col--span-2{% else %}lg:col--span-2 lg:portrait:col--span-1{% endif %}{% endif %}">
+        <span class="label lg:label--large label--gray 1bit:text--black">{% case forloop.index %}{% when 1 %}GOLD{% when 2 %}SILVER{% else %}BRONZE{% endcase %}</span>
+        <div class="lg:hidden">{% render 'avatar' with url: row[4], size: 40, fallback: person_glyph, alt: row[5] %}</div>
+        <div class="hidden lg:visible">{% render 'avatar' with url: row[4], size: 70, fallback: person_glyph, alt: row[5] %}</div>
+        <div class="flex flex--col flex--center-x gap--none w--full no-shrink">
+          <span class="title title--xsmall lg:title--large text--center">{{ row[1] | split: ' ' | last }}</span>
+          <span class="label label--xsmall lg:title--base label--gray 1bit:text--black">{{ row[2] }}</span>
+        </div>
+      </div>{% endfor %}
+    </div>
+    {% else %}
+    <table class="table table--base w--full grow"><tbody>
+      {% for packed in gc limit: 3 %}{% assign row = packed | split: '|||' %}
+      <tr>
+        <td class="w--[28px]"><span class="value value--xxsmall value--tnums">{{ row[0] }}</span></td>
+        <td class="w--[52px]">{% render 'avatar' with url: row[4], size: 38, fallback: person_glyph, alt: row[5] %}</td>
+        <td><div><span class="title title--small lg:title--base">{{ row[1] }}</span> <span class="hidden lg:inline lg:portrait:hidden label label--small label--gray 1bit:text--black">{{ row[2] }}</span><div class="lg:hidden lg:portrait:block"><span class="label label--xsmall label--gray 1bit:text--black">{{ row[2] }}</span></div></div></td>
+      </tr>{% endfor %}
+    </tbody></table>
+    {% endif %}
+  </div>
+{% endtemplate %}
+
+{% template one_day_course %}
+  <div class="flex flex--col gap--small w--full no-shrink">
+    <span class="title title--small {% unless compact %}lg:title--base{% endunless %}">THE COURSE</span>
+    <div class="grid grid--cols-12 gap--medium w--full">
+      <div class="col--span-6 flex flex--col flex--center-y overflow--hidden">
+       <div class="flex flex--col flex--left gap--xsmall w--full {% unless compact %}lg:portrait:w--auto{% endunless %}">
+        <span class="title title--small" data-clamp="2">{{ next_start | upcase }}{% if next_finish != next_start %} › {{ next_finish | upcase }}{% endif %}</span>
+        <div class="flex flex--row flex--left flex--center-y gap--xsmall flex--wrap">
+          <span class="label label--xsmall label--outline">{{ next_type | upcase }}</span>
+          <span class="label label--xsmall">{{ next_km }}</span>
+          <span class="label label--xsmall">{{ next_gain }} m ↑</span>
+        </div>
+       </div>
+      </div>
+      <div class="col--span-6 flex flex--center-x flex--center-y overflow--hidden">
+        {% if compact %}
+          {% render 'stage_profile' with path: profile_path, climbs: profile_climbs, fixedw: 205, h: 78, km: next_km %}
+        {% else %}
+          <div class="lg:hidden">{% render 'stage_profile' with path: profile_path, climbs: profile_climbs, fixedw: 205, h: 78, km: next_km %}</div>
+          <div class="hidden lg:flex">{% render 'stage_profile' with path: profile_path, climbs: profile_climbs, fixedw: 263, h: 100, km: next_km %}</div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endtemplate %}
+
+{% template one_day_results %}
+  <div class="flex flex--col gap--small w--full h--full overflow--hidden">
+    <div class="flex flex--row flex--left w--full no-shrink">{% render 'badge' with text: 'FINAL RESULTS' %}<span class="label label--xsmall lg:label--base">TOP {{ count }}</span></div>
+    <table class="table table--base w--full grow"><tbody>
+      {% for packed in gc limit: count %}{% assign row = packed | split: '|||' %}
+      <tr>
+        <td class="w--[34px]"><span class="value {% if forloop.first %}value--medium{% else %}value--small{% endif %} value--tnums">{{ row[0] }}</span></td>
+        <td class="w--[52px]">{% render 'avatar' with url: row[4], size: avatar_size, fallback: person_glyph, alt: row[5] %}</td>
+        <td><div><span class="title {% if large %}title--base lg:title--large{% else %}title--small lg:title--base{% endif %}">{{ row[1] }}</span>{% if inline_country %} <span class="label label--small label--gray 1bit:text--black">{{ row[2] }}</span>{% else %}<div><span class="label label--xsmall label--gray 1bit:text--black">{{ row[2] }}</span></div>{% endif %}</div></td>
+        <td class="text--right"><span class="value value--xxsmall value--tnums">{{ row[3] | replace: ' ', '&nbsp;' }}</span></td>
+      </tr>{% endfor %}
+    </tbody></table>
+  </div>
+{% endtemplate %}
+
+{% template one_day_champion %}
+  <div class="flex {% if vertical %}flex--col flex--center-x{% else %}flex--row flex--left flex--center-y{% endif %} gap--medium w--full no-shrink overflow--hidden">
+    <div class="lg:hidden">{% render 'avatar' with url: gc_photo, size: 70, fallback: person_glyph, alt: gc_photo_alt %}</div>
+    <div class="hidden lg:visible">{% render 'avatar' with url: gc_photo, size: 100, fallback: person_glyph, alt: gc_photo_alt %}</div>
+    <div class="flex flex--col {% if vertical %}flex--center-x{% else %}flex--left{% endif %} gap--small overflow--hidden">
+      <div class="flex flex--row">{% render 'badge' with text: winner_label %}</div>
+      <span class="title {% if large %}lg:title--xlarge{% else %}title--small lg:title--base{% endif %}" data-clamp="2">{{ gc_name }}</span>
+      <span class="label lg:label--large label--gray 1bit:text--black">{{ gc_team_code }}</span>
+      <span class="label label--small">{{ ov_date }} · {{ next_km }}</span>
+    </div>
+  </div>
+{% endtemplate %}
+{% template one_day_upcoming %}
+{% if size == 'full' %}
+<div class="layout layout--col gap--none h--full">
+ <div class="grid grid--cols-12 gap--large grow w--full">
+  <div class="col--span-4 lg:col--span-5 lg:portrait:col--span-12 h--full">{% render 'one_day_countdown' with size: size, pre_headline: pre_headline, results_pending: results_pending, race_day_waiting: race_day_waiting, days_to_start: days_to_start %}</div>
+  <div class="col--span-8 lg:col--span-7 lg:portrait:col--span-12 flex flex--col h--full overflow--hidden">
+   <div class="w--full no-shrink pt--4">{% render 'one_day_stats' with ov_date: ov_date, next_km: next_km, next_gain: next_gain, cal_glyph: cal_glyph, road_glyph: road_glyph, peak_glyph: peak_glyph %}</div><div class="divider mt--2 mb--2 no-shrink"></div>
+   <div class="grow w--full">{% render 'one_day_podium' with gc: gc, ranking_tag: ranking_tag, person_glyph: person_glyph, cards: true %}</div><div class="divider mt--2 mb--2 no-shrink"></div>
+   {% render 'one_day_course' with next_start: next_start, next_finish: next_finish, next_type: next_type, next_km: next_km, next_gain: next_gain, profile_path: profile_path, profile_climbs: profile_climbs %}
+  </div>
+ </div>
+</div>
+{% elsif size == 'half_horizontal' %}
+<div class="layout layout--col gap--none h--full px--3 py--2 lg:portrait:hidden">
+ <div class="grid grid--cols-12 gap--large grow w--full overflow--hidden">
+  <div class="col--span-6 flex flex--col gap--small overflow--hidden h--full">{% render 'one_day_countdown' with size: size, pre_headline: pre_headline, results_pending: results_pending, race_day_waiting: race_day_waiting, days_to_start: days_to_start %}<div class="flex w--full no-shrink lg:grow">{% render 'one_day_stats' with ov_date: ov_date, next_km: next_km, next_gain: next_gain, cal_glyph: cal_glyph, road_glyph: road_glyph, peak_glyph: peak_glyph %}</div></div>
+  <div class="col--span-6 flex flex--col gap--small h--full overflow--hidden"><div class="grow w--full">{% render 'one_day_podium' with gc: gc, ranking_tag: ranking_tag, person_glyph: person_glyph %}</div><div class="hidden lg:flex flex--col w--full no-shrink"><div class="divider mt--2 mb--2 no-shrink"></div> {% render 'one_day_course' with next_start: next_start, next_finish: next_finish, next_type: next_type, next_km: next_km, next_gain: next_gain, profile_path: profile_path, profile_climbs: profile_climbs, compact: true %}</div></div>
+ </div>
+</div>
+<div class="hidden lg:portrait:flex layout layout--col gap--none h--full px--3 py--2">
+ <div class="grid grid--cols-12 gap--large grow w--full">
+  <div class="col--span-4 h--full">{% render 'one_day_countdown' with size: 'portrait_horizontal', pre_headline: pre_headline, results_pending: results_pending, race_day_waiting: race_day_waiting, days_to_start: days_to_start %}</div>
+  <div class="col--span-8 flex flex--col h--full overflow--hidden">{% render 'one_day_stats' with ov_date: ov_date, next_km: next_km, next_gain: next_gain, cal_glyph: cal_glyph, road_glyph: road_glyph, peak_glyph: peak_glyph %} <div class="divider mt--2 mb--2 no-shrink"></div><div class="grow w--full">{% render 'one_day_podium' with gc: gc, ranking_tag: ranking_tag, person_glyph: person_glyph %}</div><div class="divider mt--2 mb--2 no-shrink"></div> {% render 'one_day_course' with next_start: next_start, next_finish: next_finish, next_type: next_type, next_km: next_km, next_gain: next_gain, profile_path: profile_path, profile_climbs: profile_climbs, compact: true %}</div>
+ </div>
+</div>
+{% elsif size == 'half_vertical' %}
+<div class="layout layout--col gap--none h--full px--3 py--2">
+ {% render 'one_day_countdown' with size: size, pre_headline: pre_headline, results_pending: results_pending, race_day_waiting: race_day_waiting, days_to_start: days_to_start %}<div class="grow"></div><div class="w--full no-shrink mt--2">{% render 'one_day_stats' with ov_date: ov_date, next_km: next_km, next_gain: next_gain, cal_glyph: cal_glyph, road_glyph: road_glyph, peak_glyph: peak_glyph %}</div><div class="grow"></div><div class="divider mt--2 mb--2 no-shrink"></div>
+ <div class="grow w--full lg:portrait:hidden">{% render 'one_day_podium' with gc: gc, ranking_tag: ranking_tag, person_glyph: person_glyph %}</div>
+ <div class="hidden lg:portrait:block grow w--full">{% render 'one_day_podium' with gc: gc, ranking_tag: ranking_tag, person_glyph: person_glyph, cards: true, narrow: true %}</div>
+</div>
+{% else %}
+<div class="layout layout--col flex flex--col overflow--hidden h--full lg:portrait:hidden">
+ {% render 'one_day_countdown' with size: size, pre_headline: pre_headline, results_pending: results_pending, race_day_waiting: race_day_waiting, days_to_start: days_to_start %}<div class="flex w--full no-shrink lg:grow">{% render 'one_day_stats' with ov_date: ov_date, next_km: next_km, next_gain: next_gain, cal_glyph: cal_glyph, road_glyph: road_glyph, peak_glyph: peak_glyph %}</div>
+</div>
+<div class="hidden lg:portrait:flex flex--col gap--none h--full px--3 pt--2 w--full">
+ {% render 'one_day_countdown' with size: 'portrait_quadrant', pre_headline: pre_headline, results_pending: results_pending, race_day_waiting: race_day_waiting, days_to_start: days_to_start %}<div class="w--full no-shrink mt--1">{% render 'one_day_stats' with ov_date: ov_date, next_km: next_km, next_gain: next_gain, cal_glyph: cal_glyph, road_glyph: road_glyph, peak_glyph: peak_glyph %}</div><div class="divider mt--2 mb--2 no-shrink"></div><div class="grow w--full">{% render 'one_day_podium' with gc: gc, ranking_tag: ranking_tag, person_glyph: person_glyph %}</div>
+</div>
+{% endif %}
+{% endtemplate %}
+{% template one_day_classification %}
+<div class="layout layout--col gap--none h--full px--3 py--2">
+{% if size == 'full' %}
+ {% render 'one_day_champion' with winner_label: winner_label, gc_photo: gc_photo, gc_photo_alt: gc_photo_alt, gc_name: gc_name, gc_team_code: gc_team_code, ov_date: ov_date, next_km: next_km, person_glyph: person_glyph, large: true %} <div class="divider mt--2 mb--2 no-shrink"></div>
+ <div class="flex flex--col grow w--full lg:hidden">{% render 'one_day_results' with gc: gc, person_glyph: person_glyph, count: 5, avatar_size: 38, large: true, inline_country: true %}</div>
+ <div class="hidden lg:flex flex--col grow w--full">{% render 'one_day_results' with gc: gc, person_glyph: person_glyph, count: 10, avatar_size: 32, large: true, inline_country: true %}</div>
+{% elsif size == 'half_vertical' %}
+ {% render 'one_day_champion' with winner_label: winner_label, gc_photo: gc_photo, gc_photo_alt: gc_photo_alt, gc_name: gc_name, gc_team_code: gc_team_code, ov_date: ov_date, next_km: next_km, person_glyph: person_glyph %} <div class="divider mt--2 mb--2 no-shrink"></div>
+ <div class="grow w--full lg:hidden">{% render 'one_day_results' with gc: gc, person_glyph: person_glyph, count: 5, avatar_size: 32 %}</div>
+ <div class="hidden lg:flex flex--col grow w--full">{% render 'one_day_results' with gc: gc, person_glyph: person_glyph, count: 10, avatar_size: 32 %}</div>
+{% elsif size == 'half_horizontal' %}
+ <div class="grid grid--cols-12 gap--large grow w--full">
+  <div class="col--span-4 flex flex--col flex--center-y h--full overflow--hidden">{% render 'one_day_champion' with winner_label: winner_label, gc_photo: gc_photo, gc_photo_alt: gc_photo_alt, gc_name: gc_name, gc_team_code: gc_team_code, ov_date: ov_date, next_km: next_km, person_glyph: person_glyph, vertical: true %}</div>
+  <div class="col--span-8 flex flex--col h--full overflow--hidden"><div class="flex flex--col w--full h--full lg:hidden">{% render 'one_day_results' with gc: gc, person_glyph: person_glyph, count: 3, avatar_size: 38 %}</div><div class="hidden lg:flex lg:portrait:hidden flex--col w--full h--full">{% render 'one_day_results' with gc: gc, person_glyph: person_glyph, count: 5, avatar_size: 32, inline_country: true %}</div><div class="hidden lg:portrait:flex flex--col w--full h--full">{% render 'one_day_results' with gc: gc, person_glyph: person_glyph, count: 7, avatar_size: 32, inline_country: true %}</div></div>
+ </div>
+{% else %}
+ <div class="grow w--full lg:hidden">{% render 'one_day_results' with gc: gc, person_glyph: person_glyph, count: 3, avatar_size: 38 %}</div>
+ <div class="hidden lg:flex lg:portrait:hidden flex--col grow w--full">{% render 'one_day_results' with gc: gc, person_glyph: person_glyph, count: 5, avatar_size: 32 %}</div>
+ <div class="hidden lg:portrait:flex flex--col grow w--full">{% render 'one_day_results' with gc: gc, person_glyph: person_glyph, count: 7, avatar_size: 32 %}</div>
+{% endif %}
+</div>
+{% endtemplate %}
+{% template one_day_view %}
+{% if pre_race %}{% render 'one_day_upcoming' with size: size, pre_headline: pre_headline, results_pending: results_pending, race_day_waiting: race_day_waiting, days_to_start: days_to_start, ov_date: ov_date, next_start: next_start, next_finish: next_finish, next_type: next_type, next_km: next_km, next_gain: next_gain, profile_path: profile_path, profile_climbs: profile_climbs, gc: gc, ranking_tag: ranking_tag, pre_race: pre_race, person_glyph: person_glyph, winner_label: winner_label, gc_photo: gc_photo, gc_photo_alt: gc_photo_alt, gc_name: gc_name, gc_team_code: gc_team_code, cal_glyph: cal_glyph, road_glyph: road_glyph, peak_glyph: peak_glyph %}{% else %}{% render 'one_day_classification' with size: size, pre_headline: pre_headline, results_pending: results_pending, race_day_waiting: race_day_waiting, days_to_start: days_to_start, ov_date: ov_date, next_start: next_start, next_finish: next_finish, next_type: next_type, next_km: next_km, next_gain: next_gain, profile_path: profile_path, profile_climbs: profile_climbs, gc: gc, ranking_tag: ranking_tag, pre_race: pre_race, person_glyph: person_glyph, winner_label: winner_label, gc_photo: gc_photo, gc_photo_alt: gc_photo_alt, gc_name: gc_name, gc_team_code: gc_team_code, cal_glyph: cal_glyph, road_glyph: road_glyph, peak_glyph: peak_glyph %}{% endif %}
+{% endtemplate %}
 
 {%- comment -%} avatar — circular dithered photo, Tissot 2026 -> Tissot 2025 -> Wikipedia -> glyph.
   params: url, size, fallback (svg glyph), alt (~~~ separated fallback URLs) {%- endcomment -%}
@@ -182,7 +388,8 @@
   big + legible) and the BOTTOM two-thirds holds the elevation silhouette. Marker size
   scales with circ (circle radius) + cfont (number font), in viewBox units. fixedw renders
   an exact pixel width (h ≈ fixedw/2.63 keeps circles round); else fills container width.
-  params: path, climbs, h, fixedw, circ, cfont {%- endcomment -%}
+  separate_distance_labels keeps one-day distance text out of the compressed silhouette.
+  params: path, climbs, h, fixedw, circ, cfont, separate_distance_labels {%- endcomment -%}
 {% template stage_profile %}
   {% assign sw = fixedw | default: 0 %}
   {% assign cr = circ | default: 3.9 %}
@@ -210,8 +417,12 @@
     circles stay white-fill / black-text so they read on the card. km = total stage distance. {%- endcomment -%}
   {% assign ink = ink | default: '#000' %}
   {% assign card = card | default: 'bg--gray-75' %}
-  {% if card and card != '' %}<div class="{{ card }} rounded--large overflow--hidden pt--1{% if sw and sw != 0 %} flex flex--col flex--center-x{% else %} text--center{% endif %}">{% endif %}
+  {% if card and card != '' %}<div class="{{ card }} rounded--large overflow--hidden pt--1{% if sw and sw != 0 %} flex flex--col flex--center-x{% else %} text--center{% endif %}{% if separate_distance_labels %} gap--none{% endif %}">{% endif %}
+  {% if separate_distance_labels %}
+  <svg viewBox="0 0 100 33" preserveAspectRatio="none" font-size="1" height="{{ h | default: 152 | minus: 18 }}" width="{{ sw }}">
+  {% else %}
   <svg viewBox="0 0 100 38" preserveAspectRatio="none" font-size="1"{% if sw and sw != 0 %} height="{{ h | default: 152 }}" width="{{ sw }}"{% else %} class="w--full"{% endif %}>
+  {% endif %}
     {%- comment -%} silhouette baseline sits on the strip top (y=33) so the ink strip is fully UNDER
       the route, never overlapping its low parts. On inset variants the real route is remapped into
       sx..ex, while leadx/tailx extend its baseline back to the card edges. This avoids the apparent
@@ -224,9 +435,11 @@
       <text x="50" y="19" text-anchor="middle" font-size="5" font-weight="bold" fill="#000">PROFILE PENDING</text>
     {% endif %}
     {%- comment -%} bottom ink strip + distance markers (0 km left, total km right, in white) {%- endcomment -%}
+    {% unless separate_distance_labels %}
     <rect x="0" y="33" width="100" height="5" fill="{{ ink }}"></rect>
     <text transform="translate({{ sx }},36.7) scale(3)" fill="#fff" style="font-family:'NicoClean','Inter',system-ui,sans-serif">0 km</text>
     {% if km and km != '' %}<text transform="translate({{ ex }},36.7) scale(3)" fill="#fff" text-anchor="end" style="font-family:'NicoClean','Inter',system-ui,sans-serif">{{ km }}</text>{% endif %}
+    {% endunless %}
     {% for c in climbs %}
       {% assign cp = c | split: '|||' %}
       {%- comment -%} cdx = spread-out circle x (field 6); the elbow connector still points to the TRUE x (field 1).
@@ -243,6 +456,15 @@
       <text transform="translate({{ cdx }},{{ cy }}) scale({{ cf }})" dy="0.35" font-weight="bold" text-anchor="middle" fill="#000" style="font-family:'NicoClean','Inter',system-ui,sans-serif">{{ cp[0] }}</text>
     {% endfor %}
   </svg>
+  {% if separate_distance_labels %}
+  {%- comment -%} Pixel-based coordinates keep glyphs proportional at every one-day profile size;
+    the fixed 18px strip is included in h, so the card keeps its allocated height. {%- endcomment -%}
+  <svg viewBox="0 0 {{ sw }} 18" width="{{ sw }}" height="18" font-size="1">
+    <rect width="{{ sw }}" height="18" fill="{{ ink }}"></rect>
+    <text transform="translate(12,13) scale(12)" fill="#fff" style="font-family:'NicoClean','Inter',system-ui,sans-serif">0 km</text>
+    {% if km and km != '' %}<text transform="translate({{ sw | minus: 12 }},13) scale(12)" fill="#fff" text-anchor="end" style="font-family:'NicoClean','Inter',system-ui,sans-serif">{{ km }}</text>{% endif %}
+  </svg>
+  {% endif %}
   {% if card and card != '' %}</div>{% endif %}
 {% endtemplate %}
 
