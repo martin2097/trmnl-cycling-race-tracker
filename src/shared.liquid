@@ -143,8 +143,8 @@ and portrait-specific compositions intentionally match those views.{%- endcommen
   {% assign distance = next_km | remove: ' km' %}
   <div class="flex flex--row gap--medium w--full flex--center-y no-shrink">
     <div class="grow overflow--hidden">{% render 'stat_cell' with icon: cal_glyph, value: ov_date, unit: '' %}</div>
-    <div class="grow overflow--hidden">{% render 'stat_cell' with icon: road_glyph, value: distance, unit: 'KM' %}</div>
-    <div class="grow overflow--hidden">{% render 'stat_cell' with icon: peak_glyph, value: next_gain, unit: 'M ↑' %}</div>
+    {% if distance != blank %}<div class="grow overflow--hidden">{% render 'stat_cell' with icon: road_glyph, value: distance, unit: 'KM' %}</div>{% endif %}
+    {% if next_gain > 0 %}<div class="grow overflow--hidden">{% render 'stat_cell' with icon: peak_glyph, value: next_gain, unit: 'M ↑' %}</div>{% endif %}
   </div>
 {% endtemplate %}
 
@@ -178,29 +178,31 @@ and portrait-specific compositions intentionally match those views.{%- endcommen
 {% endtemplate %}
 
 {% template one_day_course %}
+  {% if next_start != blank or next_finish != blank or next_km != blank %}
   <div class="flex flex--col gap--small w--full no-shrink">
     <span class="title title--small {% unless compact %}lg:title--base{% endunless %}">THE COURSE</span>
     <div class="grid grid--cols-12 gap--medium w--full">
-      <div class="col--span-6 flex flex--col flex--center-y overflow--hidden">
+      <div class="{% if profile_path != blank %}col--span-6{% else %}col--span-12{% endif %} flex flex--col flex--center-y overflow--hidden">
        <div class="flex flex--col flex--left gap--xsmall w--full {% unless compact %}lg:portrait:w--auto{% endunless %}">
         <span class="title title--small" data-clamp="2">{{ next_start | upcase }}{% if next_finish != next_start %} › {{ next_finish | upcase }}{% endif %}</span>
         <div class="flex flex--row flex--left flex--center-y gap--xsmall flex--wrap">
-          <span class="label label--xsmall label--outline">{{ next_type | upcase }}</span>
-          <span class="label label--xsmall">{{ next_km }}</span>
-          <span class="label label--xsmall">{{ next_gain }} m ↑</span>
+          {% if next_type != blank %}<span class="label label--xsmall label--outline">{{ next_type | upcase }}</span>{% endif %}
+          {% if next_km != blank %}<span class="label label--xsmall">{{ next_km }}</span>{% endif %}
+          {% if next_gain > 0 %}<span class="label label--xsmall">{{ next_gain }} m ↑</span>{% endif %}
         </div>
        </div>
       </div>
-      <div class="col--span-6 flex flex--center-x flex--center-y overflow--hidden">
+      {% if profile_path != blank %}<div class="col--span-6 flex flex--center-x flex--center-y overflow--hidden">
         {% if compact %}
           {% render 'stage_profile' with path: profile_path, climbs: profile_climbs, fixedw: 205, h: 78, km: next_km %}
         {% else %}
           <div class="lg:hidden">{% render 'stage_profile' with path: profile_path, climbs: profile_climbs, fixedw: 205, h: 78, km: next_km %}</div>
           <div class="hidden lg:flex">{% render 'stage_profile' with path: profile_path, climbs: profile_climbs, fixedw: 263, h: 100, km: next_km %}</div>
         {% endif %}
-      </div>
+      </div>{% endif %}
     </div>
   </div>
+  {% endif %}
 {% endtemplate %}
 
 {% template one_day_results %}
