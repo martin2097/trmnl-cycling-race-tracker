@@ -28,7 +28,7 @@ jersey holders), each [icon][label][avatar · name · team].
       {% if race_day_waiting %}
         <span class="label label--xsmall lg:label--large text--white text--center">IT'S RACE DAY TODAY!</span>
         {% else %}
-        <span class="value lg:value--large value--tnums text--white">
+        <span class="value lg:value--large value--tnums text--white" data-fit-value="true">
           {{ days_to_start }}
         </span>
         <span class="label label--xsmall lg:label--large text--white text--center">DAYS TO GO</span>
@@ -64,7 +64,7 @@ X landscape: facts share the column with the countdown (lg:grow) so the countdow
       {% if race_day_waiting %}
         <span class="title title--small text--white text--center">IT'S RACE DAY TODAY!</span>
         {% else %}
-        <span class="value value--tnums text--white">
+        <span class="value value--tnums text--white" data-fit-value="true">
           {{ days_to_start }}
         </span>
         <span class="title title--small text--white text--center">DAYS TO GO</span>
