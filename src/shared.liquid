@@ -130,7 +130,7 @@
   {% elsif race_day_waiting %}
     <span class="{{ caption_classes }} text--white text--center">IT'S RACE DAY TODAY!</span>
   {% else %}
-    <span class="value {{ number_classes }} value--tnums text--white">{{ days_to_start }}</span>
+    <span class="value {{ number_classes }} value--tnums text--white" data-fit-value="true">{{ days_to_start }}</span>
     <span class="{{ caption_classes }} text--white text--center">{% if days_to_start == 1 %}DAY TO GO{% else %}DAYS TO GO{% endif %}</span>
   {% endif %}
 </div>
