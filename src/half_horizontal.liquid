@@ -31,7 +31,7 @@ LEFT: event-specific pre-race countdown filling the quarter + 3 stats
           {% if race_day_waiting %}
             <span class="label label--xsmall text--white text--center">IT'S RACE DAY TODAY!</span>
             {% else %}
-            <span class="value value--tnums text--white">
+            <span class="value value--tnums text--white" data-fit-value="true">
               {{ days_to_start }}
             </span>
             <span class="label label--xsmall text--white text--center">DAYS TO GO</span>
@@ -226,7 +226,7 @@ m
             {% if race_day_waiting %}
               <span class="title text--white text--center">IT'S RACE DAY TODAY!</span>
               {% else %}
-              <span class="value value--mega value--tnums text--white">
+              <span class="value value--mega value--tnums text--white" data-fit-value="true">
                 {{ days_to_start }}
               </span>
               <span class="title text--white text--center">DAYS TO GO</span>
